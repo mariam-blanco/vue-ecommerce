@@ -1,0 +1,43 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+a img {
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+fieldset {
+  border: 0;
+}
+
+input {
+  box-shadow: none;
+  outline: none;
+}
+
+button {
+  background-color: transparent;
+  border: 0;
+  box-shadow: none;
+  outline: none;
+}
+
+// Por defecto, la los navegadores utilizan Arial como
+// fuente para 'inputs' y botones. También establecen en tamaño.
+
+input,
+button,
+input::placeholder {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+}

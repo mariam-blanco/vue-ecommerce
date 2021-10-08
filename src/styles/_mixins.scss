@@ -1,0 +1,185 @@
+@import './variables';
+
+/* -------- Responsive Design --------------*/
+
+// Media queries
+
+@mixin media-query-desktop {
+  @media only screen and (min-width: 860px) {
+    @content;
+  }
+}
+
+@mixin media-query-tablet {
+  @media only screen and (max-width: 860px) {
+    @content;
+  }
+}
+
+@mixin media-query-mobile {
+  @media only screen and (max-width: 500px) {
+    @content;
+  }
+}
+
+// width or height
+
+@mixin width-or-height-responsive(
+  $width-or-height,
+  $value-d,
+  $value-t,
+  $value-m
+) {
+  #{$width-or-height}: $value-d;
+  @include media-query-tablet {
+    #{$width-or-height}: $value-t;
+  }
+  @include media-query-mobile {
+    #{$width-or-height}: $value-m;
+  }
+}
+
+// Margin or padding
+
+@mixin margin-or-padding-responsive(
+  $padding-or-margin,
+  $value-d,
+  $value-t,
+  $value-m
+) {
+  #{$padding-or-margin}: $value-d;
+  @include media-query-tablet {
+    #{$padding-or-margin}: $value-t;
+  }
+  @include media-query-mobile {
+    #{$padding-or-margin}: $value-m;
+  }
+}
+
+// Responsive gap: gap, column-gap, row-gap
+// default values--> $gap: 30px, $gap-t: 10px, $gap-m: $sp-3
+
+@mixin gap-responsive($gap-type, $gap-d, $gap-t, $gap-m) {
+  #{$gap-type}: $gap-d;
+  @include media-query-tablet {
+    #{$gap-type}: $gap-t;
+  }
+  @include media-query-mobile {
+    #{$gap-type}: $gap-m;
+  }
+}
+
+@mixin changeTo-column($area-on-top: card-image, $area-on-bottom: card-body) {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    ' #{$area-on-top}    '
+    ' #{$area-on-bottom} ';
+}
+
+@mixin changeTo-column-centered {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    ' card-image '
+    ' card-body  ';
+  .card__body {
+    justify-content: center;
+    .inner-body {
+      text-align: center;
+    }
+  }
+}
+
+@mixin changeTo-column-centered {
+  @include changeTo-column();
+  .card__body {
+    justify-content: center;
+    .inner-body {
+      text-align: center;
+    }
+  }
+}
+
+/* Se repite con los mismos valores en App.vue y AppHeader.vue. Lo mismo para AppFooter.vue.
+   Se pone en un mixin para sean cambiadas a la vez porque tienen que coincidir */
+@mixin header-height-responsive() {
+  @include width-or-height-responsive(height, 97px, 90px, 90px);
+}
+@mixin hero-title-height-responsive() {
+  @include width-or-height-responsive(
+    height,
+    97px+240px,
+    90px+240px,
+    90px+100px
+  );
+}
+
+@mixin footer-height-responsive() {
+  @include width-or-height-responsive(height, 365px, 400px, 654px);
+}
+
+@mixin margin-bottom-text-blocks(
+  $mb-overline: null,
+  $mb-title: null,
+  $mb-description: null
+) {
+  .overline {
+    margin-bottom: $mb-overline;
+  }
+  .title {
+    margin-bottom: $mb-title;
+  }
+  .description {
+    margin-bottom: $mb-description;
+  }
+}
+
+/* ------------ Typography -----------------*/
+
+@mixin text($size, $line, $spacing, $weight: bold) {
+  font-size: $size;
+  line-height: $line;
+  letter-spacing: $spacing;
+  text-transform: uppercase;
+  font-weight: $weight;
+}
+
+/*----------------- Flex ------------------------------*/
+@mixin center-flex() {
+  display: flex;
+  justify-content: center;
+}
+
+@mixin flex-box-position($x, $y) {
+  display: flex;
+  justify-content: $x;
+  align-items: $y;
+}
+
+@mixin flex-column($align-items: start) {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: $align-items;
+}
+
+@mixin back-image-responsive($directory, $image) {
+  background-image: url('#{$directory}/desktop/#{$image}');
+
+  @include media-query-tablet {
+    background-image: url('#{$directory}/tablet/#{$image}');
+  }
+  @include media-query-mobile {
+    background-image: url('#{$directory}/mobile/#{$image}');
+  }
+}
+
+/* The width of the title of the cards are set to 'min-content'
+   by default and 'display: inline' to align properly the text.
+   Use this mixin to remove default styles */
+
+@mixin remove-min-content {
+  width: auto;
+  display: block;
+}
