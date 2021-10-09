@@ -1,14 +1,46 @@
 <template>
   <div class="item-quantity">
-    <button @click="decreaseQuantity">-</button>
-    <span>{{ 1 }}</span>
-    <button @click="increaseQuantity">+</button>
+    <button @click="decreaseQuantity()">-</button>
+    <span>{{ cartQuantity }}</span>
+    <button @click="increaseQuantity()">+</button>
   </div>
 </template>
 
 <script>
 export default {
   name: 'ShoppingButtonQuantity',
+  props: ['id'],
+  data() {
+    return {
+      initialQuantity: 1,
+    }
+  },
+
+  computed: {
+    itemFound() {
+      return this.$store.state.cart.find((item) => item.id === this.id)
+    },
+
+    cartQuantity() {
+      return this.itemFound ? this.itemFound.quantity : this.initialQuantity
+      //return this.$store.state.initialQuantity
+    },
+  },
+  methods: {
+    increaseQuantity() {
+      this.itemFound
+        ? this.$store.dispatch('increaseCartQuantity', this.id)
+        : this.initialQuantity++
+    },
+
+    decreaseQuantity() {
+      if (this.itemFound && this.itemFound.quantity > 0) {
+        this.$store.dispatch('decreaseCartQuantity', this.id)
+      } else if (this.initialQuantity > 0) {
+        this.initialQuantity--
+      }
+    },
+  },
 }
 </script>
 

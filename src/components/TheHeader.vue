@@ -36,8 +36,8 @@ export default {
 
   methods: {
     openModal(component) {
-      this.$store.commit('SET_IS_OPEN', !this.$store.state.isOpen)
       this.$store.dispatch('openModalComponent', component)
+      this.$store.commit('SET_IS_OPEN', !this.$store.state.isOpen)
     },
   },
 }

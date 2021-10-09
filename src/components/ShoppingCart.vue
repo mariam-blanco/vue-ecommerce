@@ -14,13 +14,12 @@
         <ShoppingItem
           v-for="(cartItem, index) in cartItems"
           :cart-item="cartItem"
+          type="cart"
           :key="index"
-        >
-          <ShoppingButtonQuantity class="item-quantity--small" />
-        </ShoppingItem>
+        />
       </ul>
       <!-- Body: Summary table ------------------------------------->
-      <ShoppingPricesTable />
+      <ShoppingPricesTable type="cart" />
     </template>
 
     <!-- Footer -------------------------------------------------->
@@ -37,22 +36,17 @@ import ShoppingItem from '@/components/ShoppingItem.vue'
 import ShoppingPricesTable from '@/components/ShoppingPricesTable.vue'
 import ShoppingLayout from '@/components/ShoppingLayout.vue'
 import BaseButton from '@/components/BaseButton.vue'
-import ShoppingButtonQuantity from '@/components/ShoppingButtonQuantity.vue'
+//import ShoppingButtonQuantity from '@/components/ShoppingButtonQuantity.vue'
 
 export default {
   name: 'ShoppingCart',
-
-  props: {
-    title: String,
-    isCart: Boolean,
-  },
 
   components: {
     ShoppingItem,
     ShoppingPricesTable,
     ShoppingLayout,
     BaseButton,
-    ShoppingButtonQuantity,
+    //ShoppingButtonQuantity,
   },
 
   computed: {

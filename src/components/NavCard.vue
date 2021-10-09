@@ -45,7 +45,6 @@ export default {
 .nav-card {
   //height: auto;
   @include flex-column(center);
-
   .nav-card__image {
     img {
       width: 100%;
@@ -58,7 +57,6 @@ export default {
     @include margin-or-padding-responsive(padding-bottom, 30px, 20px, 20px);
     background-color: $light-bg-100;
     border-radius: $border-rd;
-
     @include media-query-tablet {
       height: 165px;
     }
@@ -73,7 +71,6 @@ export default {
         width: 160px;
         height: 160px;
       }
-
       img {
         position: absolute;
         bottom: 0;
@@ -82,7 +79,6 @@ export default {
 
     .nav-card__title {
       margin-bottom: 14px;
-
       @include media-query-tablet {
         font-size: 15px;
       }
@@ -116,18 +112,15 @@ export default {
         width: 100%;
       }
     }
-
     .nav-card__title {
       font-size: 24px;
     }
   }
-
   .earphones {
     @include media-query-tablet {
       width: 180px;
       margin-bottom: -10px;
     }
-
     @include media-query-mobile {
       margin-bottom: -20px;
     }

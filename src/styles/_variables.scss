@@ -1,34 +1,38 @@
+//
 // Colors
+//
 
-$primary-color: #d87d4a;
-$primary-color-l: #fbaf85;
+$primary-color:    #d87d4a;
+$primary-color-l:  #fbaf85;
 
-$grey: #4c4c4c;
-$black: #000;
-$black-50: hsla(0, 0%, 0%, 0.5);
+$grey:             #4c4c4c;
+$black:            #000;
+$black-50:         hsla(0, 0%, 0%, 0.5);
 
-$white: #fff;
-$white-50: hsla(0, 0%, 100%, 0.5);
-$white-75: hsla(0, 0%, 100%, 0.75);
+$white:            #fff;
+$white-50:         hsla(0, 0%, 100%, 0.5);
+$white-75:         hsla(0, 0%, 100%, 0.75);
 
-$dark-bg: #101010;
-//$light-bg-100: #fafafa;
-$light-bg-100: #f1f1f1;
-$light-bg-200: #f2f2f2;
+$dark-bg:          #101010;
+//$light-bg-100:    #fafafa;
+$light-bg-100:     #f1f1f1;
+$light-bg-200:     #f2f2f2;
 
-$border-color: hsla(0, 100%, 100%, 0.2);
+$border-color:     hsla(0, 100%, 100%, 0.2);
 
-// States
+// States color
 
 $focus-primary-color: $primary-color;
 
-// Forms
+// Forms color
 
 $border-input-color: #cfcfcf;
 
+//
 // Measurement
+//
 
-$sp-base: 8px; // base space
+$sp-base: 8px; /* base space */
 $sp-1: $sp-base;
 $sp-2: 16px;
 $sp-3: 24px;
@@ -42,4 +46,6 @@ $sp-10: 80px;
 $sp-11: 88px;
 $sp-12: 96px;
 
-$border-rd: 8px; // radious
+// Border radious
+
+$border-rd: 8px; 

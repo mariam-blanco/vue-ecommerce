@@ -4,15 +4,15 @@
       <div class="th">total</div>
       <div class="price price--bold">{{ total }}</div>
     </div>
-    <div v-if="!isCart">
+    <div v-if="type === 'summary'">
       <div class="th">shipping</div>
       <div class="price price--bold">50</div>
     </div>
-    <div v-if="!isCart">
+    <div v-if="type === 'summary'">
       <div class="th">VAT (included)</div>
       <div class="price price--bold">{{ tax }}</div>
     </div>
-    <div v-if="!isCart">
+    <div v-if="type === 'summary'">
       <div class="th">grand total</div>
       <div class="price price--bold">{{ grandTotal }}</div>
     </div>
@@ -22,7 +22,9 @@
 <script>
 export default {
   name: 'ShoppingPricesTable',
-
+  props: {
+    type: String,
+  },
   computed: {
     total() {
       return this.$store.state.total

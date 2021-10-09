@@ -12,7 +12,7 @@
           class="nav-link"
           :to="{ name: 'Category', params: { category: category.name } }"
         >
-          <BaseButton class="btn--link-arrow" text="Shop">
+          <BaseButton @click="closeModal" class="btn--link-arrow" text="Shop">
             <BaseIcon icon-name="icon-arrow-right" :width="8" :height="12" />
           </BaseButton>
         </router-link>
@@ -57,6 +57,14 @@ export default {
         },
       ],
     }
+  },
+
+  methods: {
+    closeModal() {
+      if (this.$store.state.isOpen) {
+        this.$store.commit('SET_IS_OPEN', false)
+      }
+    },
   },
 }
 </script>

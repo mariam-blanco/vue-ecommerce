@@ -11,18 +11,28 @@
       <p class="price">{{ cartItem.price }}</p>
     </div>
     <div class="shopping-item__quantity">
-      <p>x{{ cartItem.quantity }}</p>
-      <slot />
+      <p v-if="type === 'summary'">x{{ cartItem.quantity }}</p>
+      <ShoppingButtonQuantity
+        v-if="type === 'cart'"
+        :id="cartItem.id"
+        :quantity="cartItem.quantity"
+        class="item-quantity--small"
+      />
     </div>
   </li>
 </template>
 
 <script>
+import ShoppingButtonQuantity from '@/components/ShoppingButtonQuantity.vue'
+
 export default {
   name: 'ShoppingItem',
   props: {
     cartItem: Object,
-    isCart: Boolean,
+    type: String,
+  },
+  components: {
+    ShoppingButtonQuantity,
   },
 }
 </script>

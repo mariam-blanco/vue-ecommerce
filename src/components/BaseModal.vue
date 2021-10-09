@@ -4,7 +4,7 @@
     class="modal-mask"
     :class="[isOpen || 'hidden']"
   >
-    <div class="modal">
+    <div class="modal" v-bind="$attrs">
       <slot />
     </div>
   </div>
@@ -13,6 +13,7 @@
 <script>
 export default {
   name: 'BaseModal',
+  inheritAttrs: false, // classes applied to tha component can be passed to the child
   computed: {
     isOpen() {
       return this.$store.state.isOpen
@@ -30,13 +31,15 @@ export default {
 .modal-mask {
   position: absolute;
   z-index: 10;
+  top: 97px;
+  bottom: 0;
   left: 0;
   width: 100vw;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: auto;
+  //overflow: auto;
   background-color: rgba(0, 0, 0, 0.4);
 
   &.hidden {
@@ -49,10 +52,9 @@ export default {
   position: absolute;
   background-color: $white;
   border-radius: $border-rd;
-}
 
-.modal-cart .modal {
-  width: 377px;
+  &.modal--cart {
+    width: 377px;
     top: 32px;
     right: $sp-3;
 
@@ -72,14 +74,19 @@ export default {
       left: $sp-3;
       right: $sp-3;
     }
-}
+  }
 
-  .modal-confirmation .modal {
+  &.modal--confirmation {
     max-width: 540px;
   }
 
-  .modal-navigation .modal {
+  &.modal--navigation {
     top: 0;
+
+    @include media-query-desktop {
+      display: none;
+    }
+
     @include media-query-tablet {
       width: 100%;
       padding: 56px 40px 67px;
@@ -93,10 +100,10 @@ export default {
     }
   }
 
-   .modal--centered {
+  &.modal--centered {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
-
+}
 </style>

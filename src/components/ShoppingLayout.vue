@@ -32,7 +32,7 @@ export default {
   padding: $sp-4 28px;
   border-radius: $border-rd;
 
-  &.cart--summary {
+  &.shopping--summary {
     width: 350px;
 
     @include media-query-tablet {

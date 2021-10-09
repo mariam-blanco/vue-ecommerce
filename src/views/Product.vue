@@ -13,7 +13,7 @@
           has-heading2
         >
           <div class="card-button-set">
-            <ShoppingButtonQuantity />
+            <ShoppingButtonQuantity :id="product.id" />
             <BaseButton
               @click="addToCart"
               class="btn--primary"
@@ -138,7 +138,7 @@ export default {
         shortName: this.shortName,
         price: this.product.price,
         image: `${this.product.slug}.jpg`,
-        quantity: 1,
+        quantity: this.$store.state.initialQuantity,
       }
 
       this.$store.dispatch('addProductToCart', cartItem)

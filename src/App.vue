@@ -3,11 +3,11 @@
   <div class="container">
     <TheHeader />
     <main class="main">
-      <router-view />
-
-      <BaseModal :class="`modal-${x}`">
+      <BaseModal :class="`modal--${modalClass}`">
         <component :is="activeComponent" />
       </BaseModal>
+
+      <router-view />
     </main>
     <TheFooter>
       <BaseNavBar />
@@ -52,6 +52,13 @@ export default {
 
     activeComponent() {
       return this.$store.state.activeModalComponent
+    },
+
+    // prettier-ignore
+    modalClass() {
+      return this.activeComponent === 'ShoppingCart' && 'cart' || 
+             this.activeComponent === 'NavCategories' && 'navigation' || 
+             this.activeComponent === 'ShoppingConfirmation' && 'confirmation' 
     },
 
     isOpen() {
@@ -126,18 +133,25 @@ export default {
   @include media-query-mobile {
     padding: 0 24px;
   }
-}
 
-.main .page {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  @include gap-responsive(row-gap, 160px, 120px, 120px);
-  @include margin-or-padding-responsive(padding-bottom, 160px, 120px, 120px);
+  .main {
+    width: 100%;
 
-  &.page--home {
-    @include gap-responsive(gap, 200px, 96px, 120px);
-    @include margin-or-padding-responsive(padding-bottom, 200px, 96px, 120px);
+  .page {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    @include gap-responsive(row-gap, 160px, 120px, 120px);
+    @include margin-or-padding-responsive(padding-bottom, 160px, 120px, 120px);
+
+    &.page--home {
+      @include gap-responsive(gap, 200px, 96px, 120px);
+      @include margin-or-padding-responsive(padding-bottom, 200px, 96px, 120px);
+    }
   }
 }
+
+
+}
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <ShoppingLayout>
+  <ShoppingLayout class="shopping--summary">
     <!-- Header -------------------------------------------------->
     <template v-slot:header>
       <h6>Summary</h6>
@@ -11,13 +11,12 @@
         <ShoppingItem
           v-for="(cartItem, index) in cartItems"
           :cart-item="cartItem"
+          type="summary"
           :key="index"
-        >
-          <p>{{ cartItem.quantity }}</p>
-        </ShoppingItem>
+        />
       </ul>
       <!-- Body: Summary table ------------------------------------->
-      <ShoppingPricesTable />
+      <ShoppingPricesTable type="summary" />
     </template>
 
     <!-- Footer -------------------------------------------------->
@@ -51,12 +50,4 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.cart--summary {
-  width: 350px;
-
-  @include media-query-tablet {
-    width: 100%;
-  }
-}
-</style>
+<style lang="scss"></style>

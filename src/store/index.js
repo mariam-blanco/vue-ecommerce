@@ -7,8 +7,9 @@ export default createStore({
     product: {},
     isLoading: false,
     isOpen: false,
-    activeModalComponent: '',
+    activeModalComponent: null,
     cart: [],
+    initialQuantity: 1, // product is not yet in the cart
     total: 0,
     tax: null,
     grandTotal: null,
@@ -27,20 +28,30 @@ export default createStore({
       state.isLoading = isLoading
     },
 
-    SET_IS_OPEN(state, isOpen) {
-      state.isOpen = isOpen
-    },
-
-    SET_ACTIVE_MODAL_COMPONENT(state, component) {
-      state.activeModalComponent = component
+    ADD_PRODUCT(state, cartItem) {
+      state.cart.push(cartItem)
     },
 
     SET_CART(state, cart) {
       state.cart = cart
     },
 
-    ADD_PRODUCT(state, cartItem) {
-      state.cart.push(cartItem)
+    INCREASE_CART_ITEM_QUANTITY(state, id) {
+      const found = state.cart.find((item) => item.id === id)
+      found.quantity++
+    },
+
+    DECREASE_CART_ITEM_QUANTITY(state, id) {
+      const found = state.cart.find((item) => item.id === id)
+      found.quantity--
+    },
+
+    INCREASE_QUANTITY(state) {
+      state.initialQuantity++
+    },
+
+    DECREASE_QUANTITY(state) {
+      state.initialQuantity--
     },
 
     SET_TOTAL(state, total) {
@@ -53,6 +64,14 @@ export default createStore({
 
     SET_GRAND_TOTAL(state, grandTotal) {
       state.grandTotal = grandTotal
+    },
+
+    SET_IS_OPEN(state, isOpen) {
+      state.isOpen = isOpen
+    },
+
+    SET_ACTIVE_MODAL_COMPONENT(state, component) {
+      state.activeModalComponent = component
     },
   },
 
@@ -77,22 +96,29 @@ export default createStore({
     },
 
     fetchProduct({ commit }, slug) {
-
       ProductService.getDetails(slug).then((response) => {
         commit('SET_PRODUCT', response.data[0])
       })
     },
 
     addProductToCart({ commit, state }, cartItem) {
-      const found = state.cart.find((item) => {
-        return cartItem.id === item.id
-      })
+      const found = state.cart.find((item) => cartItem.id === item.id)
 
       if (!found) {
         commit('ADD_PRODUCT', cartItem)
         localStorage.setItem('cart', JSON.stringify(state.cart))
         this.dispatch('calculatePrices')
       }
+    },
+
+    increaseCartQuantity({ commit }, id) {
+      commit('INCREASE_CART_ITEM_QUANTITY', id)
+      this.dispatch('calculatePrices')
+    },
+
+    decreaseCartQuantity({ commit }, id) {
+      commit('DECREASE_CART_ITEM_QUANTITY', id)
+      this.dispatch('calculatePrices')
     },
 
     removeAllCartItems({ commit }) {
@@ -120,7 +146,6 @@ export default createStore({
     },
 
     openModalComponent({ commit }, component) {
-      
       commit('SET_ACTIVE_MODAL_COMPONENT', component)
     },
   },

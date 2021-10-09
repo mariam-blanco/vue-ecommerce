@@ -1,5 +1,4 @@
 <template>
-
   <div class="page">
     <div class="hero-title">
       <h1 class="text-white">{{ category }}</h1>
