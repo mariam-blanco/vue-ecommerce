@@ -52,14 +52,13 @@ export default {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: 'card-image  card-body';
-  @include gap-responsive(gap, 30px, 20px, 20px);
+  @include gap();
   border-radius: $border-rd;
 
   &__image,
   &__body {
     width: 100%;
     height: 100%;
-    border: dashed 1px brown;
     border-radius: $border-rd;
   }
 
@@ -85,15 +84,19 @@ export default {
       padding-top: 12px;
     }
 
+    /* prettier-ignore */
     .inner-body {
-      @include margin-bottom-text-blocks($sp-2, $sp-4, $sp-5);
+      @include margin-bottom-text-blocks(
+        $sp-2, $sp-4, $sp-5);
 
       @include media-query-tablet {
-        @include margin-bottom-text-blocks($sp-2, $sp-4, $sp-3);
+        @include margin-bottom-text-blocks(
+          $sp-2, $sp-4, $sp-3);
       }
 
       @include media-query-mobile {
-        @include margin-bottom-text-blocks($sp-3, $sp-3, $sp-3);
+        @include margin-bottom-text-blocks(
+          $sp-3, $sp-3, $sp-3);
       }
 
       .title {
@@ -103,15 +106,13 @@ export default {
         display: inline-flex;
       }
 
+      /* prettier-ignore */
       .price {
         @include margin-or-padding-responsive(
           padding-bottom,
-          $sp-6,
-          $sp-4,
-          $sp-4
-        );
-        padding-bottom: $sp-6;
+          $sp-6, $sp-4, $sp-4);
       }
+      
       .card-button-set {
         display: flex;
         gap: 16px;
@@ -129,7 +130,10 @@ export default {
   &.card--product-details {
     &.card--reverse .card__body {
       padding-left: 0;
-      @include margin-or-padding-responsive(padding-right, $sp-12, $sp-7, 0);
+      /* prettier-ignore */
+      @include margin-or-padding-responsive(
+        padding-right, 
+        $sp-12, $sp-7, 0);
     }
 
     .card__image {
@@ -141,7 +145,11 @@ export default {
   }
 
   &.card--home-new {
-    @include width-or-height-responsive(height, 632px, 632px, 510px);
+    /* prettier-ignore */
+    @include width-or-height-responsive(
+      height, 
+      632px, 632px, 510px);
+
     .card__body {
       padding-left: 0;
       padding-right: $sp-12;
@@ -149,7 +157,9 @@ export default {
       .inner-body {
         /* same width for tablet. For 'mobile' is 100% */
         max-width: 380px;
-        @include margin-bottom-text-blocks($sp-3, $sp-3, $sp-5);
+        /* prettier-ignore */
+        @include margin-bottom-text-blocks(
+          $sp-3, $sp-3, $sp-5);
 
         .overline {
           color: $white-50;
@@ -177,7 +187,10 @@ export default {
     height: auto;
 
     .card__image {
-      @include width-or-height-responsive(height, 550px, 352px, 327px);
+      /* prettier-ignore */
+      @include width-or-height-responsive(
+        height, 
+        550px, 352px, 327px);
     }
 
     /* ------- Media queries ------- */
@@ -198,7 +211,10 @@ export default {
   }
 
   &.card--product-details {
-    @include width-or-height-responsive(height, 560px, 480px, auto);
+    /* prettier-ignore */
+    @include width-or-height-responsive(
+      height, 
+      560px, 480px, auto);
 
     /* ------- Media queries ------- */
     @include media-query-tablet {

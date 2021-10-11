@@ -1,83 +1,73 @@
 <template>
-  <!-- <AppMain class="page-main--home"> -->
+  <!-- Section ---------------------------------------------------->
 
-  <div class="page page--home">
-    <!-- Section ---------------------------------------------------->
-
-    <section class="section home-new">
-      <BaseCard
-        class="card--home-new card--reverse text-white"
-        name="XX99 Mark II Headphones"
-        description="Experience natural, life like audio and exceptional build quality made for the passionate music enthusiast."
-        :isNew="true"
-        has-heading1
-      >
-        <router-link
-          :to="{
-            name: 'Product',
-            params: { slug: 'xx99-mark-two-headphones' },
-          }"
-        >
-          <BaseButton class="btn--primary" />
-        </router-link>
-      </BaseCard>
-    </section>
-
-    <!-- Navigation Categories -------------------------------------->
-    <NavCategories />
-
-    <!-- Section ---------------------------------------------------->
-    <section class="section home-products">
-      <BaseCard
-        class="card--home-large ZX9-speaker text-white"
-        name="ZX9 Speaker"
-        description="Upgrade to premium speakers that are phenomenally built to deliver truly remarkable sound."
-        :image="{
-          mobile: 'home/mobile/image-speaker-zx9.png',
-          tablet: 'home/tablet/image-speaker-zx9.png',
-          desktop: 'home/desktop/image-speaker-zx9.png',
+  <section class="section home-new">
+    <BaseCard
+      class="card--home-new card--reverse text-white"
+      name="XX99 Mark II Headphones"
+      description="Experience natural, life like audio and exceptional build quality made for the passionate music enthusiast."
+      :isNew="true"
+      has-heading1
+    >
+      <router-link
+        :to="{
+          name: 'Product',
+          params: { slug: 'xx99-mark-two-headphones' },
         }"
-        has-heading1
       >
-        <router-link :to="{ name: 'Product', params: { slug: 'zx9-speaker' } }">
-          <BaseButton class="btn--secondary" />
-        </router-link>
-      </BaseCard>
+        <BaseButton class="btn--primary" />
+      </router-link>
+    </BaseCard>
+  </section>
 
-      <BaseCard
-        class="card--home-medium card--reverse ZX7-speaker"
-        name="ZX7 Speaker"
-        has-heading4
-      >
-        <router-link :to="{ name: 'Product', params: { slug: 'zx7-speaker' } }">
-          <BaseButton class="btn--outline" />
-        </router-link>
-      </BaseCard>
+  <!-- Section ---------------------------------------------------->
+  <section class="section home-products">
+    <BaseCard
+      class="card--home-large ZX9-speaker text-white"
+      name="ZX9 Speaker"
+      description="Upgrade to premium speakers that are phenomenally built to deliver truly remarkable sound."
+      :image="{
+        mobile: 'home/mobile/image-speaker-zx9.png',
+        tablet: 'home/tablet/image-speaker-zx9.png',
+        desktop: 'home/desktop/image-speaker-zx9.png',
+      }"
+      has-heading1
+    >
+      <router-link :to="{ name: 'Product', params: { slug: 'zx9-speaker' } }">
+        <BaseButton class="btn--secondary" />
+      </router-link>
+    </BaseCard>
 
-      <BaseCard
-        class="card--home-medium YX1-earphones"
-        name="YX1 Earphones"
-        :image="{
-          mobile: 'home/mobile/image-earphones-yx1.jpg',
-          tablet: 'home/tablet/image-earphones-yx1.jpg',
-          desktop: 'home/desktop/image-earphones-yx1.jpg',
-        }"
-        has-heading4
-      >
-        <router-link
-          :to="{ name: 'Product', params: { slug: 'yx1-earphones' } }"
-        >
-          <BaseButton class="btn--outline" />
-        </router-link>
-      </BaseCard>
-    </section>
-  </div>
+    <BaseCard
+      class="card--home-medium card--reverse ZX7-speaker"
+      name="ZX7 Speaker"
+      has-heading4
+    >
+      <router-link :to="{ name: 'Product', params: { slug: 'zx7-speaker' } }">
+        <BaseButton class="btn--outline" />
+      </router-link>
+    </BaseCard>
+
+    <BaseCard
+      class="card--home-medium YX1-earphones"
+      name="YX1 Earphones"
+      :image="{
+        mobile: 'home/mobile/image-earphones-yx1.jpg',
+        tablet: 'home/tablet/image-earphones-yx1.jpg',
+        desktop: 'home/desktop/image-earphones-yx1.jpg',
+      }"
+      has-heading4
+    >
+      <router-link :to="{ name: 'Product', params: { slug: 'yx1-earphones' } }">
+        <BaseButton class="btn--outline" />
+      </router-link>
+    </BaseCard>
+  </section>
 </template>
 
 <script>
 import BaseCard from '@/components/BaseCard.vue'
 import BaseButton from '@/components/BaseButton.vue'
-import NavCategories from '@/components/NavCategories.vue'
 
 export default {
   name: 'Home',
@@ -85,53 +75,72 @@ export default {
   components: {
     BaseCard,
     BaseButton,
-    NavCategories,
   },
 }
 </script>
 
 <style lang="scss">
-.section.home-new {
-  border-top: 1px solid $border-color;
-
-  @include media-query-mobile {
-    margin-left: -24px;
-    margin-right: -24px;
+/* This lets change the order or 'NavCategories' component of
+   App.vue and change the place in Home page  */
+/* prettier-ignore */
+.main--home {
+  .section {
+    &.home-new      { order: 1; }
+    &.change-order  { order: 2; }
+    &.home-products { order: 3; } 
+    &.about         { order: 4; } 
   }
 }
 
-.section.home-products {
-  display: grid;
-  justify-items: stretch;
-  grid-template-columns: 1fr;
-  grid-template-rows: 560px 320px 320px;
-  @include gap-responsive(row-gap, $sp-5, $sp-4, $sp-3);
-  grid-template-areas:
-    'card-01'
-    'card-02'
-    'card-03';
+.section {
+  &.home-new {
+    border-top: 1px solid $border-color;
 
-  @include media-query-tablet {
-    grid-template-rows: 720px 320px 320px;
+    @include media-query-mobile {
+      margin-left: -24px;
+      margin-right: -24px;
+    }
   }
 
-  @include media-query-mobile {
-    grid-template-rows: 600px 320px 1fr;
+  &.home-products {
+    display: grid;
+    justify-items: stretch;
+    grid-template-columns: 1fr;
+    grid-template-rows: 560px 320px 320px;
+    /* prettier-ignore */
+    @include gap-responsive(
+      row-gap, 
+      $sp-5, $sp-4, $sp-3);
+    grid-template-areas:
+      'card-01'
+      'card-02'
+      'card-03';
+
+    @include media-query-tablet {
+      grid-template-rows: 720px 320px 320px;
+    }
+
+    @include media-query-mobile {
+      grid-template-rows: 600px 320px 1fr;
+    }
   }
 }
 
-.card--home-large .card__body {
-  @include margin-or-padding-responsive(
-    padding,
-    0 $sp-12,
-    $sp-6 $sp-8 $sp-8 $sp-8,
-    0 $sp-3 $sp-7 $sp-3
-  );
+.card--home-large {
+  .card__body {
+    /* prettier-ignore */
+    @include margin-or-padding-responsive(
+      padding,
+      0 $sp-12, $sp-6 $sp-8 $sp-8 $sp-8, 0 $sp-3 $sp-7 $sp-3  
+    );
+  }
 }
 
-.card--home-medium .card__body {
-  @include media-query-mobile {
-    padding-left: $sp-3;
+.card--home-medium {
+  .card__body {
+    @include media-query-mobile {
+      padding-left: $sp-3;
+    }
   }
 }
 
@@ -158,12 +167,9 @@ export default {
   }
 }
 
-.ZX7-speaker,
-.YX1-earphones {
-  .card__body .inner-body .title {
-    margin-bottom: $sp-4;
-    @include remove-min-content();
-  }
+%title {
+  margin-bottom: $sp-4;
+  @include remove-min-content();
 }
 
 .ZX7-speaker {
@@ -178,6 +184,10 @@ export default {
   .card__body {
     @include media-query-tablet {
       padding-left: $sp-8;
+    }
+
+    .title {
+      @extend %title;
     }
   }
 }
@@ -201,6 +211,10 @@ export default {
     background-color: $light-bg-100;
     @include media-query-tablet {
       padding-left: $sp-5;
+    }
+
+    .title {
+      @extend %title;
     }
   }
 }

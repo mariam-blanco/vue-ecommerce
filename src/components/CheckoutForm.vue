@@ -82,10 +82,14 @@ export default {
 <style lang="scss">
 .checkout {
   flex: 1;
-  border: dashed 1px brown;
   max-width: 730px;
   padding: 54px 48px 48px;
   border-radius: $border-rd;
+  background-color: $white;
+
+  @include media-query-tablet {
+    width: 100%;
+  }
 
   &__header {
     margin-bottom: $sp-5;

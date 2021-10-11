@@ -28,16 +28,20 @@ export default {
 
   &.btn--primary {
     background-color: $primary-color;
-    color: white;
+    color: $white;
 
     &:hover {
+      background-color: $primary-color-l;
+    }
+
+    &:disabled {
       background-color: $primary-color-l;
     }
   }
 
   &.btn--secondary {
     background-color: black;
-    color: white;
+    color: $white;
 
     &:hover {
       background-color: $grey;
@@ -50,7 +54,7 @@ export default {
 
     &:hover {
       background-color: $black;
-      color: white;
+      color: $white;
     }
   }
 

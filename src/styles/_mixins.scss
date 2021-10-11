@@ -43,6 +43,14 @@
   @include media-query-mobile { #{$padding-or-margin}: $value-m; }  
 }
 
+// Responsive position 
+
+@mixin position-responsive($position, $value-d, $value-t, $value-m) {
+  #{$position}: $value-d;
+  @include media-query-tablet { #{$position}: $value-t; }  
+  @include media-query-mobile { #{$position}: $value-m; }  
+}
+
 // Responsive gap: gap, column-gap, row-gap
 /* default values--> $gap: 30px, $gap-t: 10px, $gap-m: $sp-3 */
 
@@ -50,6 +58,14 @@
   #{$gap-type}: $gap-d;
   @include media-query-tablet { #{$gap-type}: $gap-t; }
   @include media-query-mobile { #{$gap-type}: $gap-m; } 
+}
+
+@mixin gap($gap-type: gap) {
+  @include gap-responsive($gap-type, 30px, 20px, 20px) 
+}
+
+@mixin gap-narrow($gap-type: gap) {
+  @include gap-responsive($gap-type, 30px, 10px, $sp-3) 
 }
 
 // Responsive Image Background
@@ -68,6 +84,16 @@
 //
 // Layout: Frexbox & Grids
 //
+
+
+@mixin layout-default() {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  @include gap-responsive(
+    row-gap, 
+    160px, 120px, 120px);
+}
 
 @mixin changeTo-column($area-on-top: card-image, $area-on-bottom: card-body) {
   grid-template-columns: 1fr;

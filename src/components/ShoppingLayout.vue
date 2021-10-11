@@ -5,7 +5,7 @@
       <slot name="header"></slot>
     </div>
 
-    <!-- Body ------------------------------------------->
+    <!-- Body ---------------------------------------------------->
 
     <div class="shopping-layout__body">
       <slot name="body"></slot>

@@ -21,9 +21,10 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$store.commit('SET_IS_OPEN', false)
-    },
-  },
+      this.$store.state.activeModalComponent !== 'ShoppingConfirmation' &&
+        this.$store.commit('SET_IS_OPEN', false)
+    }
+  }
 }
 </script>
 
@@ -41,6 +42,10 @@ export default {
   align-items: center;
   //overflow: auto;
   background-color: rgba(0, 0, 0, 0.4);
+
+  @include media-query-tablet {
+    top: 90px;
+  }
 
   &.hidden {
     display: none;

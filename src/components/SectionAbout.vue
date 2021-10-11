@@ -17,14 +17,17 @@
       <div class="card__image">
         <picture>
           <source
-            :srcset="require(`@/assets/${image.mobile}`)"
+            :srcset="require('@/assets/shared/mobile/image-best-gear.jpg')"
             media="(max-width: 500px)"
           />
           <source
-            :srcset="require(`@/assets/${image.tablet}`)"
+            :srcset="require('@/assets/shared/tablet/image-best-gear.jpg')"
             media="(max-width: 860px)"
           />
-          <img :src="require(`@/assets/${image.desktop}`)" alt="About" />
+          <img
+            :src="require('@/assets/shared/desktop/image-best-gear.jpg')"
+            alt="About"
+          />
         </picture>
       </div>
     </div>
@@ -34,16 +37,6 @@
 <script>
 export default {
   name: 'SectionAbout',
-
-  data() {
-    return {
-      image: {
-        mobile: 'shared/mobile/image-best-gear.jpg',
-        tablet: 'shared/tablet/image-best-gear.jpg',
-        desktop: 'shared/desktop/image-best-gear.jpg',
-      },
-    }
-  },
 }
 </script>
 
@@ -53,6 +46,7 @@ export default {
   grid-template-areas: 'card-body  card-image';
 
   @include media-query-tablet {
+    height: auto;
     @include changeTo-column-centered;
   }
 

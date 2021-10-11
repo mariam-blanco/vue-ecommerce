@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <a
-      @click="openModal('NavCategories')"
+      @click="toogleModal('NavCategories')"
       class="header__icon header__icon--menu"
     >
       <BaseIcon icon-name="icon-hamburger" :width="16" :height="15" />
@@ -16,7 +16,7 @@
 
     <a
       class="header__icon header__icon--cart"
-      @click="openModal('ShoppingCart')"
+      @click="toogleModal('ShoppingCart')"
     >
       <BaseIcon icon-name="icon-cart" :width="23" :height="20" />
     </a>
@@ -35,7 +35,7 @@ export default {
   },
 
   methods: {
-    openModal(component) {
+    toogleModal(component) {
       this.$store.dispatch('openModalComponent', component)
       this.$store.commit('SET_IS_OPEN', !this.$store.state.isOpen)
     },

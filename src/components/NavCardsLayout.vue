@@ -15,7 +15,8 @@ export default {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 1fr;
-  @include gap-responsive(gap, 30px, 10px, $sp-3);
+  /* prettier-ignore */
+  @include gap-narrow();
 
   @include media-query-mobile {
     grid-template-columns: 1fr;

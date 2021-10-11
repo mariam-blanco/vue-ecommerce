@@ -2,12 +2,19 @@
   <div class="header-bg" :class="$route.path == '/' && 'header-bg--hero'"></div>
   <div class="container">
     <TheHeader />
-    <main class="main">
+    <main :class="`main main--${$route.name.toLowerCase()}`">
+      <router-view />
+      <NavCategories
+        v-if="$route.path !== '/checkout'"
+        :class="$route.path === '/' && 'change-order'"
+      />
+      <SectionAbout v-if="$route.path !== '/checkout'" />
+
+      <!-- Modal ------------------------------------------->
       <BaseModal :class="`modal--${modalClass}`">
         <component :is="activeComponent" />
       </BaseModal>
-
-      <router-view />
+      <!---------------------------------------- end Modal-->
     </main>
     <TheFooter>
       <BaseNavBar />
@@ -20,18 +27,23 @@
 import TheHeader from '@/components/TheHeader.vue'
 import TheFooter from '@/components/TheFooter.vue'
 import BaseNavBar from '@/components/BaseNavBar.vue'
+import SectionAbout from '@/components/SectionAbout.vue'
 import BaseModal from '@/components/BaseModal.vue'
+// Components inside the modal: ShoppingCart, NavCategories, ShoppingConfirmation
 import ShoppingCart from '@/components/ShoppingCart.vue'
 import NavCategories from '@/components/NavCategories.vue'
+import ShoppingConfirmation from '@/components/ShoppingConfirmation.vue'
 
 export default {
   components: {
     TheHeader,
     TheFooter,
     BaseNavBar,
+    SectionAbout,
     BaseModal,
     ShoppingCart,
     NavCategories,
+    ShoppingConfirmation,
   },
 
   created() {
@@ -78,7 +90,8 @@ export default {
   @include flex-column(center);
   @include margin-or-padding-responsive(padding, 0 24px, 0 40px, 0);
 
-  /* -------- Background -------- */
+  // Header & Footer Background
+  // Hero Background (home)
 
   .header-bg,
   .footer-bg {
@@ -92,9 +105,13 @@ export default {
     top: 0;
     @include header-height-responsive();
 
+    /* prettier-ignore */
     &.header-bg--hero {
-      @include width-or-height-responsive(height, 730px, 730px, 600px);
-      @include back-image-responsive('./assets/home', 'image-header.jpg');
+      @include width-or-height-responsive(
+        height, 
+        730px, 724px, 600px);
+      @include back-image-responsive(
+        './assets/home', 'image-header.jpg');
       background-size: auto 100%;
       background-position: center;
       background-repeat: no-repeat;
@@ -134,24 +151,61 @@ export default {
     padding: 0 24px;
   }
 
+  // Base Layout
+
+  .main,
+  .main .product,
+  .main .product-list {
+    @include layout-default();
+  }
+
   .main {
-    width: 100%;
+    /* prettier-ignore */
+    @include margin-or-padding-responsive(
+      padding-bottom, 
+      160px, 120px, 120px);
 
-  .page {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    @include gap-responsive(row-gap, 160px, 120px, 120px);
-    @include margin-or-padding-responsive(padding-bottom, 160px, 120px, 120px);
+    /* prettier-ignore */
+    &.main--home {
+      @include gap-responsive(
+        gap, 
+        200px, 96px, 120px);
+      
+      @include margin-or-padding-responsive(
+        padding-bottom, 
+        200px, 96px, 120px);
+    }
 
-    &.page--home {
-      @include gap-responsive(gap, 200px, 96px, 120px);
-      @include margin-or-padding-responsive(padding-bottom, 200px, 96px, 120px);
+    &.main--categories {
+      .product-list {
+        /* prettier-ignore */
+        @include margin-or-padding-responsive(
+            padding-top, 
+            160px, 82px, 64px);
+      }
+    }
+
+    &.main--product {
+      /* prettier-ignore */
+      @include margin-or-padding-responsive(
+        padding-top, 
+        160px, 82px, 64px);
+    }
+
+    &.main--checkout {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 32px;
+      /* prettier-ignore */
+      @include margin-or-padding-responsive(
+      padding-top, 
+      142px, 96px, 64px);
+
+      @include media-query-tablet {
+        flex-direction: column;
+        justify-content: stretch;
+      }
     }
   }
 }
-
-
-}
-
 </style>

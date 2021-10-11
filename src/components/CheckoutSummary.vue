@@ -21,7 +21,11 @@
 
     <!-- Footer -------------------------------------------------->
     <template v-slot:footer>
-      <BaseButton class="btn--primary btn--block" text="Continue" />
+      <BaseButton
+        @click="confirmShopping"
+        class="btn--primary btn--block"
+        text="Continue & pay"
+      />
     </template>
   </ShoppingLayout>
 </template>
@@ -47,7 +51,17 @@ export default {
       return this.$store.state.cart
     },
   },
+  methods: {
+    confirmShopping() {
+      this.$store.dispatch('openModalComponent', 'ShoppingConfirmation')
+      this.$store.commit('SET_IS_OPEN', true)
+    },
+  },
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.shopping--summary {
+  background-color: $white;
+}
+</style>

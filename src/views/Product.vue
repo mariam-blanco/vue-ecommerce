@@ -1,86 +1,85 @@
 <template>
-  <div class="page">
-    <section v-if="product" class="section product">
-      <div class="product__card">
-        <BaseCard
-          class="card--product-details"
-          :name="product.name"
-          :description="product.description"
-          :price="product.price"
-          :image="product.image"
-          :isNew="product.new"
-          :key="product.id"
-          has-heading2
-        >
-          <div class="card-button-set">
-            <ShoppingButtonQuantity :id="product.id" />
-            <BaseButton
-              @click="addToCart"
-              class="btn--primary"
-              text="Add to cart"
-            />
-          </div>
-        </BaseCard>
-      </div>
+  <BaseGoBackLink />
 
-      <div class="product__features-includes">
-        <div class="product-features">
-          <h3 class="product-features__title">Features</h3>
-          <p class="product-features__content">{{ product.features }}</p>
-        </div>
-        <div class="product-includes">
-          <h3 class="product-includes__title">In the box</h3>
-          <ul class="product-includes__list">
-            <li v-for="(include, index) in includes" :key="index">
-              <span>{{ include.quantity }}x</span>{{ include.item }}
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="product__gallery">
-        <picture v-for="(image, i) in gallery" :class="`image-${i}`" :key="i">
-          <source
-            :srcset="require(`@/assets/${image.mobile}`)"
-            media="(max-width: 500px)"
+  <section v-if="product" class="section product">
+    <div class="product__card">
+      <BaseCard
+        class="card--product-details"
+        :name="product.name"
+        :description="product.description"
+        :price="product.price"
+        :image="product.image"
+        :isNew="product.new"
+        :key="product.id"
+        has-heading2
+      >
+        <div class="card-button-set">
+          <ShoppingButtonQuantity :id="product.id" />
+          <BaseButton
+            @click="addToCart"
+            class="btn--primary"
+            text="Add to cart"
           />
-          <source
-            :srcset="require(`@/assets/${image.tablet}`)"
-            media="(max-width: 860px)"
-          />
-          <img :src="require(`@/assets/${image.desktop}`)" />
-        </picture>
+        </div>
+      </BaseCard>
+    </div>
+
+    <div class="product__features-includes">
+      <div class="product-features">
+        <h3 class="product-features__title">Features</h3>
+        <p class="product-features__content">{{ product.features }}</p>
       </div>
-    </section>
+      <div class="product-includes">
+        <h3 class="product-includes__title">In the box</h3>
+        <ul class="product-includes__list">
+          <li v-for="(include, index) in includes" :key="index">
+            <span>{{ include.quantity }}x</span>{{ include.item }}
+          </li>
+        </ul>
+      </div>
+    </div>
 
-    <section class="section other-products">
-      <h3>You may also like</h3>
-      <NavCardsLayout>
-        <NavCard
-          class="nav-card--others"
-          v-for="other in product.others"
-          :nav-item="other"
-          :key="other.slug"
-          is-nav-others
-        >
-          <router-link :to="{ name: 'Product', params: { slug: other.slug } }">
-            <BaseButton class="btn--primary" />
-          </router-link>
-        </NavCard>
-      </NavCardsLayout>
-    </section>
+    <div class="product__gallery">
+      <picture v-for="(image, i) in gallery" :class="`image-${i}`" :key="i">
+        <source
+          :srcset="require(`@/assets/${image.mobile}`)"
+          media="(max-width: 500px)"
+        />
+        <source
+          :srcset="require(`@/assets/${image.tablet}`)"
+          media="(max-width: 860px)"
+        />
+        <img :src="require(`@/assets/${image.desktop}`)" />
+      </picture>
+    </div>
+  </section>
 
-    <NavCategories />
-  </div>
+  <section class="section other-products">
+    <h3>You may also like</h3>
+    <NavCardsLayout>
+      <NavCard
+        class="nav-card--others"
+        v-for="other in product.others"
+        :nav-item="other"
+        :key="other.slug"
+        is-nav-others
+      >
+        <router-link :to="{ name: 'Product', params: { slug: other.slug } }">
+          <BaseButton class="btn--primary" />
+        </router-link>
+      </NavCard>
+    </NavCardsLayout>
+  </section>
 </template>
 
 <script>
 import BaseCard from '@/components/BaseCard.vue'
-import ShoppingButtonQuantity from '@/components/ShoppingButtonQuantity.vue'
 import BaseButton from '@/components/BaseButton.vue'
+import BaseGoBackLink from '@/components/BaseGoBackLink.vue'
+import ShoppingButtonQuantity from '@/components/ShoppingButtonQuantity.vue'
 import NavCardsLayout from '@/components/NavCardsLayout.vue'
 import NavCard from '@/components/NavCard.vue'
-import NavCategories from '@/components/NavCategories.vue'
+
 import { watchEffect } from 'vue'
 
 export default {
@@ -90,10 +89,10 @@ export default {
   components: {
     BaseCard,
     BaseButton,
+    BaseGoBackLink,
     ShoppingButtonQuantity,
     NavCardsLayout,
     NavCard,
-    NavCategories,
   },
 
   created() {
@@ -103,6 +102,9 @@ export default {
          to see new product. */
       this.$store.commit('SET_PRODUCT', {})
       this.$store.dispatch('fetchProduct', this.slug)
+
+      /* Initializes quantity with a new product details page */
+      this.$store.commit('SET_QUANTITY', 1)
     })
   },
 
@@ -142,6 +144,7 @@ export default {
       }
 
       this.$store.dispatch('addProductToCart', cartItem)
+      this.$store.dispatch('openModalComponent', 'ShoppingCart')
       this.$store.commit('SET_IS_OPEN', true)
     },
   },
@@ -149,39 +152,40 @@ export default {
 </script>
 
 <style lang="scss">
-.product {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  @include gap-responsive(row-gap, 160px, 120px, 120px);
-  @include margin-or-padding-responsive(margin-top, 160px, 120px, 120px);
-
-  .card,
-  .product__features-includes,
-  .product__features-includes .product-includes {
-    @include gap-responsive(column-gap, 30px, 20px, 20px);
+%padding-left {
+  @include media-query-tablet {
+    padding-left: $sp-7;
   }
+  @include media-query-mobile {
+    padding-left: 0;
+  }
+}
 
-  .card .card__body,
-  .product__features-includes .product-includes__list {
-    @include media-query-tablet {
-      padding-left: $sp-7;
-    }
-    @include media-query-tablet {
-      padding-left: 0;
+.product {
+  .card {
+    @include gap(column-gap);
+
+    .card__body {
+      @extend %padding-left;
     }
   }
 
   .product__features-includes h3 {
-    @include margin-or-padding-responsive(margin-bottom, $sp-4, $sp-4, $sp-3);
+    /* prettier-ignore */
+    @include margin-or-padding-responsive(
+      margin-bottom, 
+      $sp-4, $sp-4, $sp-3);
   }
 
   &__features-includes {
     height: auto;
     display: grid;
+    @include gap(column-gap);
     grid-template-columns: 3fr 2fr;
     grid-template-rows: 1fr;
-    grid-template-areas: 'features  includes';
+    /* prettier-ignore */
+    grid-template-areas: 
+      'features  includes';
 
     @include media-query-tablet {
       grid-template-columns: 1fr;
@@ -197,6 +201,7 @@ export default {
     }
 
     .product-includes {
+      @include gap(column-gap);
       grid-area: includes;
       padding-left: $sp-12;
 
@@ -205,7 +210,9 @@ export default {
         display: grid;
         grid-template-columns: 2fr 3fr;
         grid-template-rows: 1fr;
-        grid-template-areas: 'includes-title    includes-list';
+        /* prettier-ignore */
+        grid-template-areas: 
+          'includes-title    includes-list';
       }
 
       @include media-query-mobile {
@@ -214,20 +221,16 @@ export default {
 
       &__title {
         grid-area: includes-title;
+        /* prettier-ignore */
         @include margin-or-padding-responsive(
           margin-bottom,
-          $sp-4,
-          $sp-4,
-          $sp-3
+          $sp-4, $sp-4, $sp-3  
         );
       }
 
       &__list {
         grid-area: includes-list;
-
-        @include media-query-tablet {
-          padding-left: $sp-7;
-        }
+        @extend %padding-left;
 
         li span {
           margin-right: 20px;
@@ -238,18 +241,19 @@ export default {
     }
   }
 
+  /* prettier-ignore */
   &__gallery {
     height: 592px;
     display: grid;
     grid-template-columns: 2fr 3fr;
     grid-template-rows: 1fr 1fr;
-    @include gap-responsive(gap, 30px, 20px, 20px);
+    @include gap();
     grid-template-areas:
       'image-sm-01  image-lg-03'
       'image-sm-02  image-lg-03';
 
     @include media-query-tablet {
-      height: 368px;
+      height: auto;
     }
 
     @include media-query-mobile {
@@ -261,6 +265,10 @@ export default {
         'image-sm-02'
         'image-lg-03';
     }
+
+    .image-first  { grid-area: image-sm-01; }
+    .image-second { grid-area: image-sm-02; }
+    .image-third  { grid-area: image-lg-03; }  
 
     .image-first,
     .image-second,
@@ -275,25 +283,16 @@ export default {
         overflow: hidden;
       }
     }
-
-    .image-first {
-      grid-area: image-sm-01;
-    }
-
-    .image-second {
-      grid-area: image-sm-02;
-    }
-
-    .image-third {
-      grid-area: image-lg-03;
-    }
   }
 }
 
 .other-products {
   h3 {
     text-align: center;
-    @include margin-or-padding-responsive(margin-bottom, $sp-8, $sp-7, $sp-5);
+    /* prettier-ignore */
+    @include margin-or-padding-responsive(
+      margin-bottom, 
+      $sp-8, $sp-7, $sp-5);
   }
 }
 </style>

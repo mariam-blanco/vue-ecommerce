@@ -5,14 +5,14 @@ export default createStore({
   state: {
     products: null,
     product: {},
-    isLoading: false,
+    initialQuantity: 1 /* product is not yet in the cart */,
+    cart: [],
+    total: 0,
+    tax: 0,
+    grandTotal: 0,
     isOpen: false,
     activeModalComponent: null,
-    cart: [],
-    initialQuantity: 1, // product is not yet in the cart
-    total: 0,
-    tax: null,
-    grandTotal: null,
+    isLoading: false,
   },
 
   mutations: {
@@ -24,10 +24,25 @@ export default createStore({
       state.product = product
     },
 
-    SET_IS_LOADING(state, isLoading) {
-      state.isLoading = isLoading
+    // Initial quantity
+
+    SET_QUANTITY(state, quantity) {
+      state.initialQuantity = quantity
     },
 
+    /* Increase & decrease initial quantity of the product 
+       just before to get added to cart */
+    INCREASE_QUANTITY(state) {
+      state.initialQuantity++
+    },
+
+    DECREASE_QUANTITY(state) {
+      state.initialQuantity > 0 && state.initialQuantity--
+    },
+
+    // Cart
+
+    /* Adds product to the cart */
     ADD_PRODUCT(state, cartItem) {
       state.cart.push(cartItem)
     },
@@ -36,6 +51,7 @@ export default createStore({
       state.cart = cart
     },
 
+    /* Updates quantity of items that already exist in the cart */
     INCREASE_CART_ITEM_QUANTITY(state, id) {
       const found = state.cart.find((item) => item.id === id)
       found.quantity++
@@ -46,13 +62,7 @@ export default createStore({
       found.quantity--
     },
 
-    INCREASE_QUANTITY(state) {
-      state.initialQuantity++
-    },
-
-    DECREASE_QUANTITY(state) {
-      state.initialQuantity--
-    },
+    // Prices
 
     SET_TOTAL(state, total) {
       state.total = total
@@ -66,12 +76,20 @@ export default createStore({
       state.grandTotal = grandTotal
     },
 
+    // Modal
+
     SET_IS_OPEN(state, isOpen) {
       state.isOpen = isOpen
     },
 
     SET_ACTIVE_MODAL_COMPONENT(state, component) {
       state.activeModalComponent = component
+    },
+
+    // Loading
+
+    SET_IS_LOADING(state, isLoading) {
+      state.isLoading = isLoading
     },
   },
 
@@ -101,16 +119,19 @@ export default createStore({
       })
     },
 
+    // Adds product to the cart
     addProductToCart({ commit, state }, cartItem) {
       const found = state.cart.find((item) => cartItem.id === item.id)
 
       if (!found) {
+        console.log('cartItem.quantity: ', cartItem.quantity)
         commit('ADD_PRODUCT', cartItem)
         localStorage.setItem('cart', JSON.stringify(state.cart))
         this.dispatch('calculatePrices')
       }
     },
 
+    // Updates quantity of items that already exist in the cart
     increaseCartQuantity({ commit }, id) {
       commit('INCREASE_CART_ITEM_QUANTITY', id)
       this.dispatch('calculatePrices')
@@ -146,6 +167,7 @@ export default createStore({
     },
 
     openModalComponent({ commit }, component) {
+      console.log(component)
       commit('SET_ACTIVE_MODAL_COMPONENT', component)
     },
   },

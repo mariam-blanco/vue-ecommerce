@@ -10,35 +10,32 @@
 export default {
   name: 'ShoppingButtonQuantity',
   props: ['id'],
-  data() {
-    return {
-      initialQuantity: 1,
-    }
-  },
-
   computed: {
     itemFound() {
       return this.$store.state.cart.find((item) => item.id === this.id)
     },
 
     cartQuantity() {
-      return this.itemFound ? this.itemFound.quantity : this.initialQuantity
-      //return this.$store.state.initialQuantity
+      return this.itemFound
+        ? this.itemFound.quantity
+        : this.$store.state.initialQuantity
     },
   },
+
   methods: {
     increaseQuantity() {
+      // A. Item is not yet in the cart: increase 'initialQuantity' state
+      // B. Item is already in the cart: update 'quantity' property of this item in the cart
       this.itemFound
         ? this.$store.dispatch('increaseCartQuantity', this.id)
-        : this.initialQuantity++
+        : this.$store.commit('INCREASE_QUANTITY')
     },
 
     decreaseQuantity() {
-      if (this.itemFound && this.itemFound.quantity > 0) {
+      this.itemFound &&
+        this.itemFound.quantity > 0 &&
         this.$store.dispatch('decreaseCartQuantity', this.id)
-      } else if (this.initialQuantity > 0) {
-        this.initialQuantity--
-      }
+      !this.itemFound && this.$store.commit('DECREASE_QUANTITY')
     },
   },
 }

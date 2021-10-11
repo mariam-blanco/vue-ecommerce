@@ -1,34 +1,31 @@
 <template>
-  <div class="page">
-    <div class="hero-title">
-      <h1 class="text-white">{{ category }}</h1>
-    </div>
-
-    <section class="section product-list">
-      <BaseCard
-        v-for="(product, index) in products"
-        class="card--product-by-category"
-        :class="index === 0 || (index % 2 && 'card--reverse')"
-        :name="product.name"
-        :description="product.description"
-        :image="product.image"
-        :isNew="product.new"
-        :key="product.id"
-        has-heading2
-      >
-        <router-link :to="{ name: 'Product', params: { slug: product.slug } }">
-          <BaseButton class="btn--primary" />
-        </router-link>
-      </BaseCard>
-    </section>
-    <NavCategories />
+  <div class="hero-title">
+    <h1 class="text-white">{{ category }}</h1>
   </div>
+
+  <section class="section product-list">
+    <BaseCard
+      v-for="(product, index) in products"
+      class="card--product-by-category"
+      :class="index === 0 || (index % 2 && 'card--reverse')"
+      :name="product.name"
+      :description="product.description"
+      :image="product.image"
+      :isNew="product.new"
+      :key="product.id"
+      has-heading2
+    >
+      <router-link :to="{ name: 'Product', params: { slug: product.slug } }">
+        <BaseButton class="btn--primary" />
+      </router-link>
+    </BaseCard>
+  </section>
 </template>
 
 <script>
 import BaseCard from '@/components/BaseCard.vue'
 import BaseButton from '@/components/BaseButton.vue'
-import NavCategories from '@/components/NavCategories.vue'
+
 import { watchEffect } from 'vue'
 
 export default {
@@ -37,7 +34,6 @@ export default {
   components: {
     BaseCard,
     BaseButton,
-    NavCategories,
   },
 
   created() {
@@ -58,15 +54,11 @@ export default {
 </script>
 
 <style lang="scss">
-.product-list {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  @include gap-responsive(row-gap, 160px, 120px, 120px);
-}
-
 .hero-title {
-  @include width-or-height-responsive(height, 240px, 240px, 100px);
+  /* prettier-ignore */
+  @include width-or-height-responsive(
+    height, 
+    240px, 240px, 100px);
   @include flex-box-position(center, center);
   border-top: 1px solid $border-color;
   color: $white;

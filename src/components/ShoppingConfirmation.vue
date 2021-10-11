@@ -23,7 +23,7 @@
           <a>View less</a>
         </div>
       </div>
-      <!-- Body: Price -------------------------------------->
+      <!-- Body: Price ------------------------------------------->
       <div class="shopping-price">
         <p class="title">Grand total</p>
         <p class="price">{{ grandTotal }}</p>

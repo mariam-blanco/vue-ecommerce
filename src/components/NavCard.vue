@@ -53,8 +53,14 @@ export default {
   }
 
   &.nav-card--category {
-    @include margin-or-padding-responsive(margin-top, 30px, 68px, 68px);
-    @include margin-or-padding-responsive(padding-bottom, 30px, 20px, 20px);
+    /* prettier-ignore */
+    @include margin-or-padding-responsive(
+      margin-top, 
+      96px, 80px, 68px);
+    /* prettier-ignore */
+    @include margin-or-padding-responsive(
+      padding-bottom, 
+      30px, 20px, 20px);
     background-color: $light-bg-100;
     border-radius: $border-rd;
     @include media-query-tablet {
@@ -65,7 +71,10 @@ export default {
       position: relative;
       width: 210px;
       height: 200px;
-      @include margin-or-padding-responsive(margin-top, -90px, -60px, -60px);
+      /* prettier-ignore */
+      @include margin-or-padding-responsive(
+        margin-top, 
+        -90px, -60px, -60px);
 
       @include media-query-tablet {
         width: 160px;
@@ -92,7 +101,10 @@ export default {
     }
 
     .nav-card__image {
-      @include width-or-height-responsive(height, 318px, 318px, 120px);
+      /* prettier-ignore */
+      @include width-or-height-responsive(
+        height, 
+        318px, 318px, 120px);
       background-color: $light-bg-100;
       border-radius: $border-rd;
 
