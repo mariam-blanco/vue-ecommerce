@@ -1,5 +1,5 @@
 <template>
-  <div class="hero-title">
+  <div v-if="products" class="hero-title">
     <h1 class="text-white">{{ category }}</h1>
   </div>
 

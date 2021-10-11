@@ -53,6 +53,10 @@ export default {
   },
   methods: {
     confirmShopping() {
+      // 1.- confirm form is filled & send the information
+
+      // 2.- open 'ShoppingConfirmation' component. Once the modal is open
+      // it shoudn't get closed
       this.$store.dispatch('openModalComponent', 'ShoppingConfirmation')
       this.$store.commit('SET_IS_OPEN', true)
     },

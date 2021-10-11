@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import ProductService from '@/services/ProductService.js'
+import router from '../router'
 
 export default createStore({
   state: {
@@ -95,28 +96,45 @@ export default createStore({
 
   actions: {
     fetchProducts({ commit }, category) {
-      ProductService.getProductsByCategory(category).then((response) => {
-        const results = response.data
+      ProductService.getProductsByCategory(category)
+        .then((response) => {
+          const results = response.data
 
-        if (results.length > 1) {
-          /* order by name product model */
-          results.sort((a, b) => (a.slug < b.slug ? 1 : -1))
-          /* place "New product" in firts place of the list */
-          results.forEach((product, i) => {
-            if (product.new) {
-              results.splice(i, 1)
-              results.unshift(product)
-            }
-          })
-        }
-        commit('SET_PRODUCTS', response.data)
-      })
+          if (results.length === 0) {
+            router.push({ name: '404Resource', params: { resource: 'category' } })
+          } else if (results.length > 1) {
+            /* order by product model name */
+            results.sort((a, b) => (a.slug < b.slug ? 1 : -1))
+            /* place "New product" at the top of the list */
+            results.forEach((product, i) => {
+              if (product.new) {
+                results.splice(i, 1)
+                results.unshift(product)
+              }
+            })
+          }
+          commit('SET_PRODUCTS', response.data)
+        })
+        .catch((error) => {
+          console.error(error.message, error.name)
+          router.push({ name: 'NetworkError' }) 
+        })
     },
 
     fetchProduct({ commit }, slug) {
-      ProductService.getDetails(slug).then((response) => {
-        commit('SET_PRODUCT', response.data[0])
-      })
+      ProductService.getDetails(slug)
+        .then((response) => {
+          if (response.data.length !== 0) {
+            commit('SET_PRODUCT', response.data[0])
+          } else if (response.data.length === 0) {
+            router.push({ name: '404Resource', params: { resource: 'product' } })
+          }
+        })
+        .catch((error) => {
+          console.error(error.message, error.name)
+          router.push({ name: 'NetworkError' }) 
+          
+        })
     },
 
     // Adds product to the cart

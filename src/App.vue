@@ -208,4 +208,26 @@ export default {
     }
   }
 }
+
+.error {
+  width: 100%;
+  height: 580px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h3 {
+    text-align: center;
+    margin-bottom: $sp-4;
+  }
+
+  @include media-query-mobile {
+    height: 420px;
+    h3 {
+      font-size: 24px;
+    }
+  }
+}
+
 </style>

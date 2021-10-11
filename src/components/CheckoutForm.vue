@@ -76,6 +76,11 @@
 <script>
 export default {
   name: 'CheckoutForm',
+  methods: {
+    eMoneyOptions() {
+      
+    }
+  }
 }
 </script>
 
@@ -125,6 +130,11 @@ export default {
       width: 100%;
       margin-top: $sp-1;
       padding-left: $sp-3;
+
+      &:focus {
+        border: solid 1px $primary-color;
+        color: $primary-color;
+      }
     }
 
     label.form-field__wrapper {

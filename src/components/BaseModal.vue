@@ -23,8 +23,8 @@ export default {
     closeModal() {
       this.$store.state.activeModalComponent !== 'ShoppingConfirmation' &&
         this.$store.commit('SET_IS_OPEN', false)
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -33,23 +33,27 @@ export default {
   position: absolute;
   z-index: 10;
   top: 97px;
-  bottom: 0;
+  bottom: -97px;
   left: 0;
   width: 100vw;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  //overflow: auto;
   background-color: rgba(0, 0, 0, 0.4);
 
   @include media-query-tablet {
     top: 90px;
+    bottom: -90px;
   }
 
   &.hidden {
     display: none;
   }
+}
+
+.main--checkout .modal-mask {
+  top: 0;
 }
 
 .modal {
@@ -76,13 +80,26 @@ export default {
     }
     @include media-query-mobile {
       width: auto;
-      left: $sp-3;
       right: $sp-3;
+      left: $sp-3;
     }
   }
 
   &.modal--confirmation {
+    position: fixed;
     max-width: 540px;
+    top: 50%;
+    transform: translate(0, -50%);
+
+    @include media-query-tablet {
+      margin-right: $sp-5;
+      margin-left: $sp-5;
+    }
+
+    @include media-query-mobile {
+      margin-right: $sp-3;
+      margin-left: $sp-3;
+    }
   }
 
   &.modal--navigation {

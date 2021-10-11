@@ -24,14 +24,12 @@
 
     <!-- Footer -------------------------------------------------->
     <template v-slot:footer>
-      <router-link :to="{ name: 'Checkout' }">
-        <BaseButton
-          @click="this.$store.commit('SET_IS_OPEN', false)"
-          class="btn--primary btn--block"
-          text="Checkout"
-          :disabled="numCartItems === 0"
-        />
-      </router-link>
+      <BaseButton
+        @click="checkout"
+        class="btn--primary btn--block"
+        text="Checkout"
+        :disabled="numCartItems === 0"
+      />
     </template>
   </ShoppingLayout>
 </template>
@@ -67,6 +65,11 @@ export default {
   methods: {
     removeCartItems() {
       this.$store.dispatch('removeAllCartItems')
+    },
+
+    checkout() {
+      this.$store.commit('SET_IS_OPEN', false)
+      this.$router.push({ name: 'Checkout' })
     },
   },
 }

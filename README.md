@@ -1,4 +1,4 @@
-# audiophile-ecommerce-website (Not finished)
+# audiophile-ecommerce-website (UNDER CONSTRUCTION)
 
 ## Project setup
 

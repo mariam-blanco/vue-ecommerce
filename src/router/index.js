@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
-import Category from '../views/Category.vue'
-import Product from '../views/Product.vue'
-import Checkout from '../views/Checkout.vue'
+import Home from '@/views/Home.vue'
+import Category from '@/views/Category.vue'
+import Product from '@/views/Product.vue'
+import Checkout from '@/views/Checkout.vue'
+import NotFound from '@/views/NotFound.vue'
+import NetworkError from '@/views/NetworkError.vue'
 
 const routes = [
   {
@@ -28,11 +30,30 @@ const routes = [
     props: true,
     component: Checkout,
   },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    component: NotFound,
+  },
+  {
+    path: '/404/:resource',
+    name: '404Resource',
+    component: NotFound,
+    props: true,
+  },
+  {
+    path: '/network-error',
+    name: 'NetworkError',
+    component: NetworkError
+  }
 ]
 
 const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
   routes,
-  history: createWebHistory(),
+  scrollBehavior() {
+    return { top: 0 }
+  },
 })
 
 export default router
