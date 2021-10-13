@@ -101,7 +101,10 @@ export default createStore({
           const results = response.data
 
           if (results.length === 0) {
-            router.push({ name: '404Resource', params: { resource: 'category' } })
+            router.push({
+              name: '404Resource',
+              params: { resource: 'category' },
+            })
           } else if (results.length > 1) {
             /* order by product model name */
             results.sort((a, b) => (a.slug < b.slug ? 1 : -1))
@@ -117,7 +120,7 @@ export default createStore({
         })
         .catch((error) => {
           console.error(error.message, error.name)
-          router.push({ name: 'NetworkError' }) 
+          router.push({ name: 'NetworkError' })
         })
     },
 
@@ -127,13 +130,15 @@ export default createStore({
           if (response.data.length !== 0) {
             commit('SET_PRODUCT', response.data[0])
           } else if (response.data.length === 0) {
-            router.push({ name: '404Resource', params: { resource: 'product' } })
+            router.push({
+              name: '404Resource',
+              params: { resource: 'product' },
+            })
           }
         })
         .catch((error) => {
           console.error(error.message, error.name)
-          router.push({ name: 'NetworkError' }) 
-          
+          router.push({ name: 'NetworkError' })
         })
     },
 

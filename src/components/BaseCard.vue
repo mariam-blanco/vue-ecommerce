@@ -78,46 +78,6 @@ export default {
     grid-area: card-body;
     display: flex;
     align-items: center;
-    padding-left: $sp-12;
-
-    @include media-query-mobile {
-      padding-top: 12px;
-    }
-
-    /* prettier-ignore */
-    .inner-body {
-      @include margin-bottom-text-blocks(
-        $sp-2, $sp-4, $sp-5);
-
-      @include media-query-tablet {
-        @include margin-bottom-text-blocks(
-          $sp-2, $sp-4, $sp-3);
-      }
-
-      @include media-query-mobile {
-        @include margin-bottom-text-blocks(
-          $sp-3, $sp-3, $sp-3);
-      }
-
-      .title {
-        /* without this when the width is set to 'inline-flex' or
-           'inline-block' it aligns the text at the left  */
-        width: min-content;
-        display: inline-flex;
-      }
-
-      /* prettier-ignore */
-      .price {
-        @include margin-or-padding-responsive(
-          padding-bottom,
-          $sp-6, $sp-4, $sp-4);
-      }
-      
-      .card-button-set {
-        display: flex;
-        gap: 16px;
-      }
-    }
   }
 
   /* ------ Card modifiers ------  */
@@ -126,68 +86,69 @@ export default {
     grid-template-areas: 'card-body  card-image';
   }
 
+  /* (Note: See cards of Home in Home.vue)  */
+
   &.card--product-by-category,
   &.card--product-details {
-    &.card--reverse .card__body {
-      padding-left: 0;
-      /* prettier-ignore */
-      @include margin-or-padding-responsive(
-        padding-right, 
-        $sp-12, $sp-7, 0);
-    }
-
     .card__image {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include center-flex(center);
       background-color: $light-bg-100;
     }
   }
 
-  &.card--home-new {
-    /* prettier-ignore */
+  &.card--home-new { 
     @include width-or-height-responsive(
       height, 
       632px, 632px, 510px);
-
-    .card__body {
-      padding-left: 0;
-      padding-right: $sp-12;
-
-      .inner-body {
-        /* same width for tablet. For 'mobile' is 100% */
-        max-width: 380px;
-        /* prettier-ignore */
-        @include margin-bottom-text-blocks(
-          $sp-3, $sp-3, $sp-5);
-
-        .overline {
-          color: $white-50;
-        }
-
-        .description {
-          max-width: 350px;
-          color: $white-75;
-        }
-      }
-    }
+    
+    @include card-body-padding(
+      0, $sp-12, 
+      0, 0);
 
     @include media-query-tablet {
       @include changeTo-column-centered();
       grid-template-rows: 1fr;
       grid-template-areas: ' card-body  ';
-
-      .card__body {
-        padding: 0;
-      }
     }
+  }
+
+  &.card--home-large {
+    @include card-body-padding(
+      $sp-12, $sp-12, 
+      $sp-8, $sp-8,
+      $sp-3, $sp-3);
+    
+    .card__body {
+      @include margin-or-padding-responsive(
+        padding-top,
+        0, $sp-6, 0);
+      
+      @include margin-or-padding-responsive(
+        padding-bottom,
+        0, $sp-8, $sp-7);
+    }
+  }
+
+  &.card--home-medium {
+    @include card-body-padding(
+      $sp-12, 0, 
+      $sp-5, 0,
+      $sp-3, 0);
   }
 
   &.card--product-by-category {
     height: auto;
+    @include card-body-padding(
+      $sp-12, 0, 
+      $sp-8, $sp-8);
+
+    &.card--reverse {
+      @include card-body-padding(
+        0, $sp-12, 
+        $sp-8, $sp-8);
+    }
 
     .card__image {
-      /* prettier-ignore */
       @include width-or-height-responsive(
         height, 
         550px, 352px, 327px);
@@ -204,30 +165,29 @@ export default {
 
       .card__body {
         padding-top: $sp-4;
-        padding-left: $sp-8;
-        padding-right: $sp-8;
       }
     }
   }
 
   &.card--product-details {
-    /* prettier-ignore */
     @include width-or-height-responsive(
       height, 
       560px, 480px, auto);
+    @include gap(column-gap); 
+    
+    @include card-body-padding(
+      $sp-12, 0, 
+      $sp-7, 0);
 
     /* ------- Media queries ------- */
     @include media-query-tablet {
       grid-template-columns: 2fr 3fr;
       grid-template-rows: 1fr;
-
-      .card__body {
-        padding-left: $sp-7;
-      }
     }
 
     @include media-query-mobile {
       @include changeTo-column();
+      
       .card__image {
         height: 327px;
 
@@ -236,6 +196,57 @@ export default {
           width: auto;
         }
       }
+    }
+  }
+}
+
+.inner-body {
+  @include margin-bottom-text-blocks(
+    $sp-2, $sp-4, $sp-5);
+
+  @include media-query-tablet {
+    @include margin-bottom-text-blocks(
+      $sp-2, $sp-4, $sp-3);
+    }
+
+  @include media-query-mobile {
+    @include margin-bottom-text-blocks(
+      $sp-3, $sp-3, $sp-3);
+    }
+
+  .title {
+    /* without this when the width is set to 'inline-flex' or
+       'inline-block' it aligns the text at the left  */
+    width: min-content;
+    display: inline-flex;
+  }
+
+  .price {
+    @include margin-or-padding-responsive(
+      padding-bottom,
+      $sp-6, $sp-4, $sp-4);
+  }
+      
+  .card-button-set {
+    display: flex;
+    gap: 16px;
+  }
+}
+
+.card--home-new {
+  .inner-body {
+    /* same width for tablet. For 'mobile' is 100% */
+    max-width: 380px;
+    @include margin-bottom-text-blocks(
+      $sp-3, $sp-3, $sp-5);
+
+    .overline {
+      color: $white-50;
+    }
+
+    .description {
+      max-width: 350px;
+      color: $white-75;
     }
   }
 }

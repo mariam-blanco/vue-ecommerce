@@ -38,6 +38,10 @@ export default {
     @include media-query-tablet {
       width: 100%;
     }
+
+    @include media-query-mobile {
+     padding: 32px 24px;   
+    }
   }
 
   &__header {

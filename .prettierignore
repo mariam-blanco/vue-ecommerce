@@ -1,2 +1,3 @@
 src/styles/_mixins.scss
 src/styles/_variables.scss
+src/components/BaseCard.vue

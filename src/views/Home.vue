@@ -126,24 +126,6 @@ export default {
   }
 }
 
-.card--home-large {
-  .card__body {
-    /* prettier-ignore */
-    @include margin-or-padding-responsive(
-      padding,
-      0 $sp-12, $sp-6 $sp-8 $sp-8 $sp-8, 0 $sp-3 $sp-7 $sp-3  
-    );
-  }
-}
-
-.card--home-medium {
-  .card__body {
-    @include media-query-mobile {
-      padding-left: $sp-3;
-    }
-  }
-}
-
 .ZX9-speaker {
   grid-area: card-01;
 
@@ -151,17 +133,19 @@ export default {
     @include changeTo-column-centered();
   }
 
-  .card__body .inner-body {
-    max-width: 340px;
-    @include margin-bottom-text-blocks(null, $sp-3, $sp-5);
+  .card__body {
+    .inner-body {
+      max-width: 340px;
+      @include margin-bottom-text-blocks(null, $sp-3, $sp-5);
 
-    @include media-query-mobile {
-      .title {
-        font-size: 36px;
-      }
+      @include media-query-mobile {
+        .title {
+          font-size: 36px;
+        }
 
-      .description {
-        margin-bottom: $sp-3;
+        .description {
+          margin-bottom: $sp-3;
+        }
       }
     }
   }
@@ -182,10 +166,6 @@ export default {
   }
 
   .card__body {
-    @include media-query-tablet {
-      padding-left: $sp-8;
-    }
-
     .title {
       @extend %title;
     }
@@ -209,9 +189,6 @@ export default {
     grid-area: card-body;
     height: 100%;
     background-color: $light-bg-100;
-    @include media-query-tablet {
-      padding-left: $sp-5;
-    }
 
     .title {
       @extend %title;

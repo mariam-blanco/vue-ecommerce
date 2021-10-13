@@ -152,23 +152,10 @@ export default {
 </script>
 
 <style lang="scss">
-%padding-left {
-  @include media-query-tablet {
-    padding-left: $sp-7;
-  }
-  @include media-query-mobile {
-    padding-left: 0;
-  }
-}
+
 
 .product {
-  .card {
-    @include gap(column-gap);
-
-    .card__body {
-      @extend %padding-left;
-    }
-  }
+  
 
   .product__features-includes h3 {
     /* prettier-ignore */
@@ -230,7 +217,12 @@ export default {
 
       &__list {
         grid-area: includes-list;
-        @extend %padding-left;
+        @include media-query-tablet {
+    padding-left: $sp-7;
+  }
+  @include media-query-mobile {
+    padding-left: 0;
+  }
 
         li span {
           margin-right: 20px;

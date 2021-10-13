@@ -14,8 +14,7 @@ export default {
 .loading {
   height: 200px;
   background-color: yellow;
-  display: flex;
-  justify-content: center;
+  @include center-flex();
 
   p {
     color: $black;

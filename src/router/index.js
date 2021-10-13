@@ -13,7 +13,7 @@ const routes = [
     component: Home,
   },
   {
-    path: '/:category',
+    path: '/category/:category',
     name: 'Category',
     props: true,
     component: Category,
@@ -44,8 +44,8 @@ const routes = [
   {
     path: '/network-error',
     name: 'NetworkError',
-    component: NetworkError
-  }
+    component: NetworkError,
+  },
 ]
 
 const router = createRouter({

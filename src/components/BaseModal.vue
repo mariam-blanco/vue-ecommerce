@@ -37,9 +37,7 @@ export default {
   left: 0;
   width: 100vw;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include center-flex(center);
   background-color: rgba(0, 0, 0, 0.4);
 
   @include media-query-tablet {
@@ -86,10 +84,10 @@ export default {
   }
 
   &.modal--confirmation {
-    position: fixed;
+   
     max-width: 540px;
-    top: 50%;
-    transform: translate(0, -50%);
+    top: 50px;
+    //transform: translate(0, -50%);
 
     @include media-query-tablet {
       margin-right: $sp-5;

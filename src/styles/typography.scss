@@ -40,13 +40,20 @@ h1 {
 }
 h2 {
   @include text(40px, 44px, 1.5px);
+
   @include media-query-mobile {
     @include text(28px, 38px, 1px);
   }
 }
+
 h3 {
   @include text(32px, 36px, 1.15px);
+
+  @include media-query-mobile {
+    font-size: 24px;
+  }
 }
+
 h4 {
   @include text(28px, 38px, 2px);
 }
@@ -59,7 +66,7 @@ h6 {
 
 .overline {
   color: $primary-color;
-  @include text(14px, 10px, 10px, regular);
+  @include text(14px, 19px, 10px, regular);
 }
 
 .price {
@@ -78,7 +85,7 @@ h6 {
 
 .subtitle {
   color: $primary-color;
-  @include text(12px, 44px, 1.5px);
+  @include text(13px, 25px, 1px);
 }
 
 label {

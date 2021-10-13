@@ -77,10 +77,8 @@
 export default {
   name: 'CheckoutForm',
   methods: {
-    eMoneyOptions() {
-      
-    }
-  }
+    eMoneyOptions() {},
+  },
 }
 </script>
 
@@ -94,10 +92,18 @@ export default {
 
   @include media-query-tablet {
     width: 100%;
+    padding: 32px 28px;
+  }
+
+  @include media-query-mobile {
+     padding: 32px 24px;   
   }
 
   &__header {
     margin-bottom: $sp-5;
+    @include media-query-mobile {
+    margin-bottom: $sp-2;   
+  }
   }
 
   .form-fieldset {
@@ -108,12 +114,24 @@ export default {
     row-gap: $sp-3;
     margin-bottom: $sp-7;
 
+    @include media-query-mobile {
+      grid-template-columns: 1fr; 
+      margin-bottom: $sp-4;  
+    }
+
+    legend {
+      margin-bottom: $sp-2; 
+    }
+    
     &:last-child {
-      margin-bottom: 0; /* removes 'margin-bottom: $sp-7' */
+      margin-bottom: 0; /* removes 'margin-bottom: $sp-7' */  
     }
 
     .form-field--span2-col {
       grid-column: span 2;
+      @include media-query-mobile {
+      grid-column: span 1;  
+    }
     }
     .form-field--span2-row {
       grid-row: span 2;

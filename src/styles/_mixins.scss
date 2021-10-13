@@ -2,7 +2,7 @@
 
 
 //
-// Breakpoint viewport sizes and media queries.
+// MEDIA QUERIES
 //
 
 @mixin media-query-desktop {
@@ -24,40 +24,75 @@
 }
 
 //
-// Responsive design
+// RESPONSIVE DESIGN
 //
 
 // Responsive width or height
 
-@mixin width-or-height-responsive($width-or-height, $value-d, $value-t, $value-m) {
-  #{$width-or-height}: $value-d;
-  @include media-query-tablet { #{$width-or-height}: $value-t; }
-  @include media-query-mobile { #{$width-or-height}: $value-m; } 
+@mixin width-or-height-responsive(
+  $width-or-height, 
+  $value-d, $value-t, $value-m) {
+  
+  @include media-query-desktop { #{$width-or-height}: $value-d; }
+  @include media-query-tablet  { #{$width-or-height}: $value-t; }
+  @include media-query-mobile  { #{$width-or-height}: $value-m; }  
 }
 
 // Responsive margin or padding
 
-@mixin margin-or-padding-responsive($padding-or-margin, $value-d, $value-t, $value-m) {
-  #{$padding-or-margin}: $value-d;
-  @include media-query-tablet { #{$padding-or-margin}: $value-t; }  
-  @include media-query-mobile { #{$padding-or-margin}: $value-m; }  
+@mixin margin-or-padding-responsive(
+  $padding-or-margin, 
+  $value-d, $value-t, $value-m) {
+    
+  @include media-query-desktop { #{$padding-or-margin}: $value-d; }
+  @include media-query-tablet  { #{$padding-or-margin}: $value-t; }
+  @include media-query-mobile  { #{$padding-or-margin}: $value-m; }    
+}
+
+// card__body padding
+
+@mixin card-body-padding(
+  $left_d, $right_d, 
+  $left_t, $right_t, 
+  $left_m: 0, $right_m:0) {
+  
+  .card__body {
+    padding-left: $left_d;
+    padding-right: $right_d;
+    
+    @include media-query-tablet {
+      padding-left: $left_t;
+      padding-right: $right_t;
+    }  
+    
+    @include media-query-mobile { 
+      padding-left: $left_m;
+      padding-right: $right_m; 
+    } 
+  }   
 }
 
 // Responsive position 
 
-@mixin position-responsive($position, $value-d, $value-t, $value-m) {
-  #{$position}: $value-d;
-  @include media-query-tablet { #{$position}: $value-t; }  
-  @include media-query-mobile { #{$position}: $value-m; }  
+@mixin position-responsive(
+  $position, 
+  $value-d, $value-t, $value-m) {
+  
+  @include media-query-desktop { #{$position}: $value-d; }
+  @include media-query-tablet  { #{$position}: $value-t; }
+  @include media-query-mobile  { #{$position}: $value-m; }   
 }
 
 // Responsive gap: gap, column-gap, row-gap
 /* default values--> $gap: 30px, $gap-t: 10px, $gap-m: $sp-3 */
 
-@mixin gap-responsive($gap-type, $gap-d, $gap-t, $gap-m) {
-  #{$gap-type}: $gap-d;
-  @include media-query-tablet { #{$gap-type}: $gap-t; }
-  @include media-query-mobile { #{$gap-type}: $gap-m; } 
+@mixin gap-responsive(
+  $gap-type, 
+  $gap-d, $gap-t, $gap-m) {
+  
+  @include media-query-desktop { #{$gap-type}: $gap-d; }
+  @include media-query-tablet  { #{$gap-type}: $gap-t; }
+  @include media-query-mobile  { #{$gap-type}: $gap-m; } 
 }
 
 @mixin gap($gap-type: gap) {
@@ -82,9 +117,8 @@
 }
 
 //
-// Layout: Frexbox & Grids
+// LAYOUT: FLEXBOX & GRID
 //
-
 
 @mixin layout-default() {
   width: 100%;
@@ -95,7 +129,10 @@
     160px, 120px, 120px);
 }
 
-@mixin changeTo-column($area-on-top: card-image, $area-on-bottom: card-body) {
+@mixin changeTo-column(
+  $area-on-top: card-image, 
+  $area-on-bottom: card-body) {
+  
   grid-template-columns: 1fr;
   grid-template-rows: 1fr auto;
   grid-template-areas:
@@ -109,18 +146,10 @@
   grid-template-areas:
     ' card-image '
     ' card-body  ';
+  
   .card__body {
     justify-content: center;
-    .inner-body {
-      text-align: center;
-    }
-  }
-}
-
-@mixin changeTo-column-centered {
-  @include changeTo-column();
-  .card__body {
-    justify-content: center;
+      
     .inner-body {
       text-align: center;
     }
@@ -128,12 +157,13 @@
 }
 
 //
-// Flex box & positioning elements 
+// FLEXBOX & POSITIONING ELEMENTS 
 //
 
-@mixin center-flex() {
+@mixin center-flex($align-content: null) {
   display: flex;
   justify-content: center;
+  align-items: $align-content;
 }
 
 @mixin flex-box-position($x, $y) {
@@ -151,8 +181,8 @@
 
 
 //
-// 1. Header & Footer App height
-// 2. Hero title height
+// 1. HEADER & FOOTER HEIGHT
+// 2. HERO TITLE HEIGHT 
 //
 // Same values has to been applied to App.vue and TheHeader.vue. Same for TheFooter.vue
 //
@@ -183,7 +213,7 @@
 }
 
 //
-// Text 
+// TEXT 
 //
 
 @mixin text($size, $line, $spacing, $weight: bold) {
@@ -194,15 +224,15 @@
   font-weight: $weight;
 }
 
-
-
-// Utils
+//
+// UTILS
+//
 
 /* The width of the title of the cards are set to 'min-content'
    by default and 'display: inline' to align properly the text.
    Use this mixin to remove default styles */
 
-   @mixin remove-min-content {
+@mixin remove-min-content {
   width: auto;
   display: block;
 }
