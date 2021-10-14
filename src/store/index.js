@@ -147,7 +147,6 @@ export default createStore({
       const found = state.cart.find((item) => cartItem.id === item.id)
 
       if (!found) {
-        console.log('cartItem.quantity: ', cartItem.quantity)
         commit('ADD_PRODUCT', cartItem)
         localStorage.setItem('cart', JSON.stringify(state.cart))
         this.dispatch('calculatePrices')
@@ -190,7 +189,6 @@ export default createStore({
     },
 
     openModalComponent({ commit }, component) {
-      console.log(component)
       commit('SET_ACTIVE_MODAL_COMPONENT', component)
     },
   },

@@ -59,7 +59,7 @@ export default {
       // it shoudn't get closed
       this.$store.dispatch('openModalComponent', 'ShoppingConfirmation')
       this.$store.commit('SET_IS_OPEN', true)
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0)
     },
   },
 }

@@ -40,7 +40,7 @@ export default {
     }
 
     @include media-query-mobile {
-     padding: 32px 24px;   
+      padding: 32px 24px;
     }
   }
 

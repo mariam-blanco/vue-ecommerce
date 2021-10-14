@@ -84,7 +84,6 @@ export default {
   }
 
   &.modal--confirmation {
-   
     max-width: 540px;
     top: 50px;
     //transform: translate(0, -50%);

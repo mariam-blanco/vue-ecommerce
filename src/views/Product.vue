@@ -146,17 +146,14 @@ export default {
       this.$store.dispatch('addProductToCart', cartItem)
       this.$store.dispatch('openModalComponent', 'ShoppingCart')
       this.$store.commit('SET_IS_OPEN', true)
+      window.scrollTo(0, 0)
     },
   },
 }
 </script>
 
 <style lang="scss">
-
-
 .product {
-  
-
   .product__features-includes h3 {
     /* prettier-ignore */
     @include margin-or-padding-responsive(
@@ -218,11 +215,11 @@ export default {
       &__list {
         grid-area: includes-list;
         @include media-query-tablet {
-    padding-left: $sp-7;
-  }
-  @include media-query-mobile {
-    padding-left: 0;
-  }
+          padding-left: $sp-7;
+        }
+        @include media-query-mobile {
+          padding-left: 0;
+        }
 
         li span {
           margin-right: 20px;
