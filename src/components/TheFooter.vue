@@ -13,15 +13,31 @@
         facility - we’re open 7 days a week.
       </p>
     </div>
-    <div class="footer__social"></div>
+    <div class="footer__social">
+      <a href="https://www.facebook.com/">
+        <BaseIcon iconName="icon-facebook" />
+      </a>
+      <a href="https://www.twitter.com/">
+        <BaseIcon iconName="icon-twitter" :height="20" />
+      </a>
+      <a href="https://www.instagram.com/">
+        <BaseIcon iconName="icon-instagram" />
+      </a>  
+    </div>
     <div class="footer__copyright">Copyright 2021. All Rights Reserved</div>
   </footer>
 </template>
 
 <script>
+import BaseIcon from '@/components/BaseIcon.vue';
+
 export default {
   name: 'TheFooter',
-}
+  components: {
+    BaseIcon
+  }
+};
+
 </script>
 
 <style lang="scss">
@@ -106,11 +122,30 @@ export default {
   }
 
   &__social {
-    border: 1px solid red;
-    height: 24px;
-    width: 100px;
     grid-area: social;
     justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    a {
+      height: auto;
+      line-height: 0;
+      
+      svg {
+          fill: $white;
+        }
+      &:hover {
+        cursor: pointer;
+
+        svg {
+          fill: $primary-color;
+        }
+      }
+
+    }
+
+
 
     @include media-query-mobile {
       justify-self: inherit;
