@@ -16,4 +16,7 @@ export default {
   getDetails(slug) {
     return apiClient.get(`/products?slug=${slug}`)
   },
+  sendShoppingDetails(clientDetails) {
+    return apiClient.post('/clients', clientDetails)
+  },
 }

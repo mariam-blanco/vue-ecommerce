@@ -1,9 +1,5 @@
 <template>
-  <div
-    @click.self="closeModal"
-    class="modal-mask"
-    :class="[isOpen || 'hidden']"
-  >
+  <div @click.self="closeModal" class="modal-mask">
     <div class="modal" v-bind="$attrs">
       <slot />
     </div>
@@ -14,11 +10,6 @@
 export default {
   name: 'BaseModal',
   inheritAttrs: false, // classes applied to tha component can be passed to the child
-  computed: {
-    isOpen() {
-      return this.$store.state.isOpen
-    },
-  },
   methods: {
     closeModal() {
       this.$store.state.activeModalComponent !== 'ShoppingConfirmation' &&
@@ -31,7 +22,7 @@ export default {
 <style lang="scss">
 .modal-mask {
   position: absolute;
-  z-index: 10;
+  z-index: 20;
   top: 97px;
   bottom: -97px;
   left: 0;
@@ -44,10 +35,6 @@ export default {
     top: 90px;
     bottom: -90px;
   }
-
-  &.hidden {
-    display: none;
-  }
 }
 
 .main--checkout .modal-mask {
@@ -55,7 +42,7 @@ export default {
 }
 
 .modal {
-  z-index: 20;
+  z-index: 30;
   position: absolute;
   background-color: $white;
   border-radius: $border-rd;
@@ -65,13 +52,14 @@ export default {
     top: 32px;
     right: $sp-3;
 
-    @media only screen and (min-width: 1100px) {
+    @media only screen and (min-width: 1185px) {
+      margin-right: $sp-5;
       left: 50%;
       transform: translate(47%, 0);
     }
 
     @include media-query-desktop {
-      right: $sp-3;
+      right: $sp-5;
     }
     @include media-query-tablet {
       right: $sp-5;

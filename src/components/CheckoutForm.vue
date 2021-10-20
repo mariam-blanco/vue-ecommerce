@@ -3,26 +3,36 @@
     <div class="checkout__header">
       <h3>Checkout</h3>
     </div>
-    <form class="checkout__form">
+    <!-- id="checkoutForm" lets associate the form with a button that is outside <form> tags.
+          The associte button must have an atribute form="checkoutForm" -->
+    <form
+      @submit.prevent="sendForm"
+      id="checkoutForm"
+      novalidate="true"
+      class="checkout__form"
+    >
       <fieldset class="form-fieldset">
         <legend class="subtitle">Billing Details</legend>
         <BaseInput
           label="Name"
-          v-model="customer.name"
+          v-model="clientDetails.name"
           type="text"
           placeholder="Alexei Ward"
+          :error="errors.name"
         />
         <BaseInput
           label="Email Address"
-          v-model="customer.email"
-          type="text"
+          v-model="clientDetails.email"
+          type="email"
           placeholder="alexei@mail.com"
+          :error="errors.email"
         />
         <BaseInput
           label="Phone Number"
-          v-model="customer.phone"
-          type="text"
+          v-model="clientDetails.phone"
+          type="tel"
           placeholder="+1 202-555-0136"
+          :error="errors.phone"
         />
       </fieldset>
 
@@ -32,27 +42,31 @@
         <BaseInput
           style-modifier="span2-col"
           label="Address"
-          v-model="customer.address"
+          v-model="clientDetails.address"
           type="text"
           placeholder="1137 Williams Avenue"
+          :error="errors.address"
         />
         <BaseInput
           label="ZIP Code"
-          v-model="customer.code"
+          v-model="clientDetails.code"
           type="text"
           placeholder="10001"
+          :error="errors.code"
         />
         <BaseInput
           label="City"
-          v-model="customer.city"
+          v-model="clientDetails.city"
           type="text"
           placeholder="New York"
+          :error="errors.city"
         />
         <BaseInput
           label="Country"
-          v-model="customer.country"
+          v-model="clientDetails.country"
           type="text"
           placeholder="United States"
+          :error="errors.country"
         />
       </fieldset>
 
@@ -64,36 +78,36 @@
         <BaseRadio
           style-modifier="wrapper"
           label="e-Money"
-          v-model="customer.paymentMethod"
+          v-model="clientDetails.paymentMethod"
           value="eMoney"
           name="payment-method"
           checked
         />
-        
+
         <BaseRadio
           style-modifier="wrapper"
           label="Cash on Delivery"
-          v-model="customer.paymentMethod"
+          v-model="clientDetails.paymentMethod"
           value="cash"
           name="payment-method"
         />
 
         <BaseInput
-          v-if="customer.paymentMethod === 'eMoney'"
+          v-if="clientDetails.paymentMethod === 'eMoney'"
           label="e-Money Number"
-          v-model.number="customer.eMoney.number"
-          type="number"
+          v-model="clientDetails.eMoney.number"
+          type="text"
           placeholder="238521993"
         />
         <BaseInput
-          v-if="customer.paymentMethod === 'eMoney'"
+          v-if="clientDetails.paymentMethod === 'eMoney'"
           label="e-Money PIN"
-          v-model.number="customer.eMoney.pin"
-          type="number"
+          v-model="clientDetails.eMoney.pin"
+          type="text"
           placeholder="6891"
         />
 
-        <div v-if="customer.paymentMethod === 'cash'" class="payment-cash">
+        <div v-if="clientDetails.paymentMethod === 'cash'" class="payment-cash">
           <img src="@/assets/shared/desktop/icon-cash.svg" />
           <p>
             The ‘Cash on Delivery’ option enables you to pay in cash when our
@@ -103,24 +117,24 @@
         </div>
       </fieldset>
     </form>
-
-    <div class="checkout__footer"></div>
   </div>
 </template>
 
 <script>
 import BaseInput from '@/components/BaseInput.vue'
 import BaseRadio from '@/components/BaseRadio.vue'
+import ProductService from '@/services/ProductService.js'
 
 export default {
   name: 'CheckoutForm',
   components: {
     BaseInput,
-    BaseRadio
+    BaseRadio,
   },
   data() {
     return {
-      customer: {
+      errors: {},
+      clientDetails: {
         name: '',
         email: '',
         phone: '',
@@ -138,12 +152,46 @@ export default {
   },
 
   methods: {
-    eMoneyOptions() {},
+    formNotValid() {
+      this.errors = {}
+      // eslint-disable-next-line no-unused-vars
+      const { paymentMethod, eMoney, ...clientDetailsRest } = this.clientDetails
+
+      for (const detail in clientDetailsRest) {
+        if (!clientDetailsRest[detail]) {
+          this.errors[detail] = `${detail} required`
+        }
+      }
+
+      return Object.keys(this.errors).length !== 0 ? true : false
+    },
+
+    sendForm() {
+      // 1.- confirm form is filled & send the information
+      if (this.formNotValid()) {
+        return
+      }
+
+      ProductService.sendShoppingDetails(this.clientDetails)
+        .then((response) => {
+          // open 'ShoppingConfirmation' component. Once the modal is open
+          // it shoudn't get closed
+          this.$store.dispatch('openModalComponent', 'ShoppingConfirmation')
+          this.$store.commit('SET_IS_OPEN', true)
+          window.scrollTo(0, 0)
+          console.log('Response', response)
+        })
+        .catch((error) => {
+          console.log('Error', error)
+        })
+    },
   },
 }
 </script>
 
 <style lang="scss">
+@import '@/styles/forms.scss';
+
 .checkout {
   flex: 1;
   max-width: 730px;
@@ -166,107 +214,5 @@ export default {
       margin-bottom: $sp-2;
     }
   }
-}
-.form-fieldset {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-rows: auto;
-  column-gap: $sp-2;
-  row-gap: $sp-3;
-  margin-bottom: $sp-7;
-
-  @include media-query-mobile {
-    grid-template-columns: 1fr;
-    margin-bottom: $sp-4;
-  }
-
-  legend {
-    margin-bottom: $sp-2;
-  }
-
-  &:last-child {
-    margin-bottom: 0; /* removes 'margin-bottom: $sp-7' */
-  }
-}
-
-%input-wrapper {
-  height: 56px;
-  border: solid 1px $border-input-color;
-  border-radius: $border-rd;
-}
-
-.form-field {
-
-  input[type='text'],
-  input[type='number'] {
-    @extend %input-wrapper;
-    width: 100%;
-    margin-top: $sp-1;
-    padding-left: $sp-3;
-
-    &:focus {
-      border: solid 1px $primary-color;
-      color: $primary-color;
-    }
-  }
-
-  input[type='radio'] {
-  position: absolute;
-  top: 20px;
-  left: 10px;
-  opacity: 0;
-  margin-right: $sp-2;
-  border: solid 1px $border-input-color;
-
-  & + .checkmark {
-    position: absolute;
-    top: 18px;
-    left: $sp-2;
-    width: 20px;
-    height: 20px;
-    border: solid 1px $border-input-color;
-    border-radius: 50%;
-  }
-
-  & + .checkmark:after {
-    content: '';
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }
-
-  &:checked + .checkmark:after {
-    background-color: $primary-color;
-  }
-}
-}
-.form-field--span2-col {
-  grid-column: span 2;
-
-  @include media-query-mobile {
-    grid-column: span 1;
-  }
-}
-
-.form-field--span2-row {
-  grid-row: span 2;
-}
-
-.form-field--wrapper {
-  @extend %input-wrapper;
-  position: relative;
-  padding-top: 20px;
-  padding-left: $sp-6;
-}
-
-
-
-.payment-cash {
-  grid-column: span 2;
-  display: flex;
-  gap: 32px;
 }
 </style>

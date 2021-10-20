@@ -20,9 +20,12 @@
     </template>
 
     <!-- Footer -------------------------------------------------->
+    <!-- The button atribute 'form' lets associate <button> elements to <form>s 
+          anywhere in the document, not just inside a <form>. -->
     <template v-slot:footer>
       <BaseButton
-        @click="confirmShopping"
+        :type="'submit'"
+        form="checkoutForm"
         class="btn--primary btn--block"
         text="Continue & pay"
       />
@@ -49,17 +52,6 @@ export default {
   computed: {
     cartItems() {
       return this.$store.state.cart
-    },
-  },
-  methods: {
-    confirmShopping() {
-      // 1.- confirm form is filled & send the information
-
-      // 2.- open 'ShoppingConfirmation' component. Once the modal is open
-      // it shoudn't get closed
-      this.$store.dispatch('openModalComponent', 'ShoppingConfirmation')
-      this.$store.commit('SET_IS_OPEN', true)
-      window.scrollTo(0, 0)
     },
   },
 }

@@ -3,14 +3,19 @@
     <!-- Header -------------------------------------------------->
     <template v-slot:header>
       <h6>
-        Cart<span> ({{ numCartItems }})</span>
+        Cart<span v-if="numCartItems > 0"> ({{ numCartItems }})</span>
       </h6>
-      <a class="link" @click="removeCartItems">Remove all</a>
+      <a v-if="numCartItems > 0" class="link" @click="removeCartItems"
+        >Remove all</a
+      >
     </template>
 
     <!-- Body: Shopping list ------------------------------------->
     <template v-slot:body>
-      <ul class="shopping-list">
+      <p class="shopping-message" v-if="numCartItems === 0">
+        Your cart is empty
+      </p>
+      <ul v-if="numCartItems > 0" class="shopping-list">
         <ShoppingItem
           v-for="(cartItem, index) in cartItems"
           :cart-item="cartItem"
@@ -19,7 +24,7 @@
         />
       </ul>
       <!-- Body: Summary table ------------------------------------->
-      <ShoppingPricesTable type="cart" />
+      <ShoppingPricesTable v-if="numCartItems > 0" type="cart" />
     </template>
 
     <!-- Footer -------------------------------------------------->
@@ -39,17 +44,14 @@ import ShoppingItem from '@/components/ShoppingItem.vue'
 import ShoppingPricesTable from '@/components/ShoppingPricesTable.vue'
 import ShoppingLayout from '@/components/ShoppingLayout.vue'
 import BaseButton from '@/components/BaseButton.vue'
-//import ShoppingButtonQuantity from '@/components/ShoppingButtonQuantity.vue'
 
 export default {
   name: 'ShoppingCart',
-
   components: {
     ShoppingItem,
     ShoppingPricesTable,
     ShoppingLayout,
     BaseButton,
-    //ShoppingButtonQuantity,
   },
 
   computed: {
@@ -58,7 +60,7 @@ export default {
     },
 
     numCartItems() {
-      return this.cartItems.length
+      return this.$store.state.cartNumItems
     },
   },
 
@@ -76,60 +78,7 @@ export default {
 </script>
 
 <style lang="scss">
-.cart {
-  display: flex;
-  flex-direction: column;
-  row-gap: $sp-4;
-  padding: $sp-4 28px;
-  border-radius: $border-rd;
-
-  &.cart--summary {
-    width: 350px;
-
-    @include media-query-tablet {
-      width: 100%;
-    }
-  }
-
-  &__header {
-    display: flex;
-    justify-content: space-between;
-
-    .link {
-      text-decoration: underline;
-      cursor: pointer;
-
-      &:hover {
-        color: $primary-color;
-      }
-    }
-  }
-
-  &__list-items {
-    display: flex;
-    flex-direction: column;
-    row-gap: $sp-3;
-  }
-
-  &__summary-table {
-    color: $black-50;
-    display: table;
-
-    & > div {
-      display: table-row;
-    }
-
-    & > div > div {
-      display: table-cell;
-    }
-
-    .th {
-      text-transform: uppercase;
-    }
-
-    .price {
-      text-align: right;
-    }
-  }
+.shopping-message {
+  text-align: center;
 }
 </style>

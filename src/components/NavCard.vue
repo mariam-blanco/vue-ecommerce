@@ -44,7 +44,7 @@ export default {
 <style lang="scss">
 .nav-card {
   //height: auto;
-  @include flex-column(center);
+  @include flex-column($justify-c: flex-end);
   .nav-card__image {
     img {
       width: 100%;
@@ -53,10 +53,12 @@ export default {
   }
 
   &.nav-card--category {
+    height: 204px;
+
     /* prettier-ignore */
     @include margin-or-padding-responsive(
       margin-top, 
-      96px, 80px, 68px);
+      80px, 80px, 68px);
     /* prettier-ignore */
     @include margin-or-padding-responsive(
       padding-bottom, 
@@ -68,21 +70,30 @@ export default {
     }
 
     .nav-card__image {
-      position: relative;
       width: 210px;
-      height: 200px;
+      height: 190px;
       /* prettier-ignore */
       @include margin-or-padding-responsive(
-        margin-top, 
+        margin-top,  
         -90px, -60px, -60px);
 
       @include media-query-tablet {
         width: 160px;
         height: 160px;
       }
+
       img {
-        position: absolute;
-        bottom: 0;
+        overflow: hidden;
+      }
+
+      &.earphones {
+        width: 220px;
+        height: 170px;
+
+        @include media-query-tablet {
+          width: 200px;
+          height: 150px;
+        }
       }
     }
 
@@ -126,15 +137,6 @@ export default {
     }
     .nav-card__title {
       font-size: 24px;
-    }
-  }
-  .earphones {
-    @include media-query-tablet {
-      width: 180px;
-      margin-bottom: -10px;
-    }
-    @include media-query-mobile {
-      margin-bottom: -20px;
     }
   }
 }

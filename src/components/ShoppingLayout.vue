@@ -26,8 +26,8 @@ export default {
 
 <style lang="scss">
 .shopping-layout {
-  display: flex;
-  flex-direction: column;
+  min-height: 280px;
+  @include flex-column($align-i: stretch);
   row-gap: $sp-4;
   padding: $sp-4 28px;
   border-radius: $border-rd;

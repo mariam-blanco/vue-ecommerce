@@ -8,14 +8,13 @@
         :key="category.id"
         is-nav-category
       >
-        <router-link
-          class="nav-link"
-          :to="{ name: 'Category', params: { category: category.name } }"
+        <BaseButton
+          @click="goToCategory(category.name)"
+          class="btn--link-arrow"
+          text="Shop"
         >
-          <BaseButton @click="closeModal" class="btn--link-arrow" text="Shop">
-            <BaseIcon icon-name="icon-arrow-right" :width="8" :height="12" />
-          </BaseButton>
-        </router-link>
+          <BaseIcon icon-name="icon-arrow-right" :width="8" :height="12" />
+        </BaseButton>
       </NavCard>
     </NavCardsLayout>
   </section>
@@ -60,7 +59,12 @@ export default {
   },
 
   methods: {
-    closeModal() {
+    goToCategory(categoryName) {
+      this.$router.push({
+        name: 'Category',
+        params: { category: categoryName },
+      })
+
       if (this.$store.state.isOpen) {
         this.$store.commit('SET_IS_OPEN', false)
       }
@@ -69,4 +73,7 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.main--home .nav-categories {
+}
+</style>

@@ -64,9 +64,7 @@
         :key="other.slug"
         is-nav-others
       >
-        <router-link :to="{ name: 'Product', params: { slug: other.slug } }">
-          <BaseButton class="btn--primary" />
-        </router-link>
+        <BaseButton @click="goToProduct(other.slug)" class="btn--primary" />
       </NavCard>
     </NavCardsLayout>
   </section>
@@ -112,15 +110,12 @@ export default {
     product() {
       return this.$store.state.product
     },
-
     gallery() {
       return this.$store.state.product.gallery
     },
-
     includes() {
       return this.$store.state.product.includes
     },
-
     shortName() {
       const removeWords = ['WIRELESS', 'HEADPHONES', 'EARFHONES', 'SPEAKER']
       const itemName = this.product.name.toUpperCase()
@@ -133,6 +128,13 @@ export default {
   },
 
   methods: {
+    goToProduct(productSlug) {
+      this.$router.push({
+        name: 'Product',
+        params: { slug: productSlug },
+      })
+    },
+
     addToCart() {
       const cartItem = {
         id: this.product.id,

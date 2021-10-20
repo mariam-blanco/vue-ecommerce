@@ -68,11 +68,11 @@ export default {
     /* The method 'replace' is similar to 'push' method but disables the
        browser back botton */
     goHome() {
-      // 1.- Remove all items from client cart
+      /* 1- Remove all items from client cart */
       this.$store.dispatch('removeAllCartItems')
-      // 2.- Push to 'Home' and disables the browser back botton
+      /* 2- Replaces current route with 'Home' route in the histoty of the browser */
       this.$router.replace({ name: 'Home' })
-      // 3.- Close modal
+      /* 3- Close modal */
       this.$store.commit('SET_IS_OPEN', false)
     },
   },

@@ -1,15 +1,16 @@
 <template>
-  <button class="btn">{{ text }}<slot /></button>
+  <button class="btn" :type="type">{{ text }}<slot /></button>
 </template>
 
 <script>
 export default {
   name: 'BaseButton',
-  components: 'BaseIcon',
-
   props: {
-    text: {
+    type: {
       type: String,
+      default: 'button',
+    },
+    text: {
       default: 'See product',
     },
   },
@@ -21,6 +22,11 @@ export default {
   @include text(13px, 25px, 1px);
   width: 160px;
   height: 48px;
+  transition: background 0.25s ease-in;
+
+  &:hover {
+    transition: background 0.25s ease-out;
+  }
 
   &.btn--block {
     width: 100%;
@@ -66,8 +72,9 @@ export default {
   }
 
   &.btn--link-arrow {
+    display: flex;
     svg {
-      vertical-align: -1px;
+      vertical-align: 0px;
       height: 100%;
       margin-left: 12px;
       fill: none;

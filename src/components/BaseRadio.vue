@@ -2,13 +2,14 @@
   <label
     class="form-field"
     :class="styleModifier && `form-field--${styleModifier}`"
-    >
+  >
     <input
       type="radio"
       :value="value"
       @change="$emit('update:modelValue', value)"
       :checked="modelValue === value"
-      v-bind="$attrs"  
+      v-bind="$attrs"
+      class="radio"
     />
     <span class="checkmark"></span>
     {{ label }}
@@ -25,8 +26,8 @@ export default {
     modelValue: [String, Number],
     value: {
       type: [String, Number],
-      required: true
-    }
+      required: true,
+    },
   },
 }
 </script>

@@ -8,6 +8,7 @@ export default createStore({
     product: {},
     initialQuantity: 1 /* product is not yet in the cart */,
     cart: [],
+    cartNumItems: 0,
     total: 0,
     tax: 0,
     grandTotal: 0,
@@ -38,10 +39,14 @@ export default createStore({
     },
 
     DECREASE_QUANTITY(state) {
-      state.initialQuantity > 0 && state.initialQuantity--
+      state.initialQuantity >= 1 && state.initialQuantity--
     },
 
     // Cart
+
+    SET_CART_NUM_ITEMS(state) {
+      state.cartNumItems = state.cart.length
+    },
 
     /* Adds product to the cart */
     ADD_PRODUCT(state, cartItem) {
@@ -148,10 +153,15 @@ export default createStore({
 
       if (!found) {
         commit('ADD_PRODUCT', cartItem)
+        commit('SET_CART_NUM_ITEMS')
         localStorage.setItem('cart', JSON.stringify(state.cart))
         this.dispatch('calculatePrices')
       }
     },
+
+    //updateCartNumItems({ commit, state }) {
+    //  commit('SET_CART_NUM_ITEMS', state.cart.length)
+    //},
 
     // Updates quantity of items that already exist in the cart
     increaseCartQuantity({ commit }, id) {
@@ -166,6 +176,7 @@ export default createStore({
 
     removeAllCartItems({ commit }) {
       commit('SET_CART', [])
+      commit('SET_CART_NUM_ITEMS')
       commit('SET_TOTAL', null)
       commit('SET_TAX', null)
       commit('SET_GRAND_TOTAL', null)

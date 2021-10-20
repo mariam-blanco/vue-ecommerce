@@ -1,6 +1,5 @@
 <template>
   <!-- Section ---------------------------------------------------->
-
   <section class="section home-new">
     <BaseCard
       class="card--home-new card--reverse text-white"
@@ -9,14 +8,10 @@
       :isNew="true"
       has-heading1
     >
-      <router-link
-        :to="{
-          name: 'Product',
-          params: { slug: 'xx99-mark-two-headphones' },
-        }"
-      >
-        <BaseButton class="btn--primary" />
-      </router-link>
+      <BaseButton
+        @click="goToProduct('xx99-mark-two-headphones')"
+        class="btn--primary"
+      />
     </BaseCard>
   </section>
 
@@ -33,9 +28,7 @@
       }"
       has-heading1
     >
-      <router-link :to="{ name: 'Product', params: { slug: 'zx9-speaker' } }">
-        <BaseButton class="btn--secondary" />
-      </router-link>
+      <BaseButton @click="goToProduct('zx9-speaker')" class="btn--secondary" />
     </BaseCard>
 
     <BaseCard
@@ -43,9 +36,7 @@
       name="ZX7 Speaker"
       has-heading4
     >
-      <router-link :to="{ name: 'Product', params: { slug: 'zx7-speaker' } }">
-        <BaseButton class="btn--outline" />
-      </router-link>
+      <BaseButton @click="goToProduct('zx7-speaker')" class="btn--outline" />
     </BaseCard>
 
     <BaseCard
@@ -58,9 +49,7 @@
       }"
       has-heading4
     >
-      <router-link :to="{ name: 'Product', params: { slug: 'yx1-earphones' } }">
-        <BaseButton class="btn--outline" />
-      </router-link>
+      <BaseButton @click="goToProduct('yx1-earphones')" class="btn--outline" />
     </BaseCard>
   </section>
 </template>
@@ -71,10 +60,17 @@ import BaseButton from '@/components/BaseButton.vue'
 
 export default {
   name: 'Home',
-
   components: {
     BaseCard,
     BaseButton,
+  },
+  methods: {
+    goToProduct(productSlug) {
+      this.$router.push({
+        name: 'Product',
+        params: { slug: productSlug },
+      })
+    },
   },
 }
 </script>
@@ -95,7 +91,9 @@ export default {
 .section {
   &.home-new {
     border-top: 1px solid $border-color;
-
+    // to adjust categories margin. If this is changed will cause
+    // problems in the categories modal navigation
+    margin-bottom: -50px;
     @include media-query-mobile {
       margin-left: -24px;
       margin-right: -24px;

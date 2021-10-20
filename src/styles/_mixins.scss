@@ -172,11 +172,11 @@
   align-items: $y;
 }
 
-@mixin flex-column($align-items: start) {
+@mixin flex-column($justify-c: space-between, $align-i: center) {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: $align-items;
+  justify-content: $justify-c;
+  align-items: $align-i;
 }
 
 
@@ -236,4 +236,6 @@
   width: auto;
   display: block;
 }
+
+
 

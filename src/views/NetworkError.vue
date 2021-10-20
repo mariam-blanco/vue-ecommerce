@@ -1,5 +1,5 @@
 <template>
-  <div class="error network-error">
+  <div class="page-error network-error">
     <h3>It looks like you're experiencing some network issues.</h3>
 
     <BaseButton @click="$router.go(-1)" class="btn--primary" text="Try again" />

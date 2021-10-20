@@ -22,22 +22,21 @@
       </a>
       <a href="https://www.instagram.com/">
         <BaseIcon iconName="icon-instagram" />
-      </a>  
+      </a>
     </div>
     <div class="footer__copyright">Copyright 2021. All Rights Reserved</div>
   </footer>
 </template>
 
 <script>
-import BaseIcon from '@/components/BaseIcon.vue';
+import BaseIcon from '@/components/BaseIcon.vue'
 
 export default {
   name: 'TheFooter',
   components: {
-    BaseIcon
-  }
-};
-
+    BaseIcon,
+  },
+}
 </script>
 
 <style lang="scss">
@@ -131,10 +130,10 @@ export default {
     a {
       height: auto;
       line-height: 0;
-      
+
       svg {
-          fill: $white;
-        }
+        fill: $white;
+      }
       &:hover {
         cursor: pointer;
 
@@ -142,10 +141,7 @@ export default {
           fill: $primary-color;
         }
       }
-
     }
-
-
 
     @include media-query-mobile {
       justify-self: inherit;

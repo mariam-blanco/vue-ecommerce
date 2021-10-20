@@ -10,7 +10,7 @@
           :srcset="require(`@/assets/${image.tablet}`)"
           media="(max-width: 860px)"
         />
-        <img :src="require(`@/assets/${image.desktop}`)" />
+        <img :src="require(`@/assets/${image.desktop}`)" :alt="name" />
       </picture>
     </div>
     <div class="card__body">
@@ -41,7 +41,7 @@ export default {
     hasHeading1: Boolean,
     hasHeading2: Boolean,
     hasHeading4: Boolean,
-  },
+  }
 }
 </script>
 

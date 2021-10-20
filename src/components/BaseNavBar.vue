@@ -29,15 +29,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .nav {
   display: flex;
   justify-content: space-between;
   column-gap: 36px;
 
   @include media-query-mobile {
-    @include flex-column(center);
-
+    @include flex-column();
     gap: 16px;
   }
 

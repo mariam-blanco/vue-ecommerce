@@ -11,9 +11,12 @@
       <SectionAbout v-if="$route.path !== '/checkout'" />
 
       <!-- Modal ------------------------------------------->
-      <BaseModal :class="`modal--${modalClass}`">
-        <component :is="activeComponent" />
-      </BaseModal>
+      <transition name="fade">
+        <BaseModal v-if="isOpen" :class="`modal--${modalClass}`">
+          <component :is="activeComponent" />
+        </BaseModal>
+      </transition>
+
       <!---------------------------------------- end Modal-->
     </main>
     <TheFooter>
@@ -54,6 +57,7 @@ export default {
       this.$store.commit('SET_TOTAL', localStorage.getItem('total'))
       this.$store.commit('SET_TAX', savedSummary.tax)
       this.$store.commit('SET_GRAND_TOTAL', savedSummary.grandTotal)
+      this.$store.commit('SET_CART_NUM_ITEMS')
     }
   },
 
@@ -66,15 +70,15 @@ export default {
       return this.$store.state.activeModalComponent
     },
 
+    isOpen() {
+      return this.$store.state.isOpen
+    },
+
     // prettier-ignore
     modalClass() {
       return this.activeComponent === 'ShoppingCart' && 'cart' || 
              this.activeComponent === 'NavCategories' && 'navigation' || 
              this.activeComponent === 'ShoppingConfirmation' && 'confirmation' 
-    },
-
-    isOpen() {
-      return this.$store.state.isOpen
     },
   },
 }
@@ -86,73 +90,25 @@ export default {
 
 #app {
   position: relative; /* Para posicionar de manera obsoluta el fondo oscuro del header y del footer */
-  width: 100vw;
-  @include flex-column(center);
-  @include margin-or-padding-responsive(padding, 0 24px, 0 40px, 0);
+  width: 100%;
+  @include flex-column();
+  /* prettier-ignore */
+  @include margin-or-padding-responsive(
+    padding, 
+    0 40px, 0 24px, 0);
 
-  // Header & Footer Background
-  // Hero Background (home)
-
-  .header-bg,
-  .footer-bg {
-    background-color: $dark-bg;
-    position: absolute;
-    z-index: -10;
+  .container {
     width: 100%;
-  }
+    max-width: 1110px;
+    min-height: 100vh;
+    @include flex-column($align-i: center);
 
-  .header-bg {
-    top: 0;
-    @include header-height-responsive();
-
-    /* prettier-ignore */
-    &.header-bg--hero {
-      @include width-or-height-responsive(
-        height, 
-        730px, 724px, 600px);
-      @include back-image-responsive(
-        './assets/home', 'image-header.jpg');
-      background-size: auto 100%;
-      background-position: center;
-      background-repeat: no-repeat;
-
-      @include media-query-tablet {
-        background-size: cover;
-      }
-
-      @include media-query-mobile {
-        background-position: right 50% bottom 0px;
-      }
-
-      &::before {
-        content: '';
-        background-color: rgba(0, 0, 0, 0.3);
-        display: block;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-      }
+    @include media-query-mobile {
+      padding: 0 24px;
     }
   }
 
-  .footer-bg {
-    bottom: 0;
-    @include footer-height-responsive();
-  }
-}
-
-.container {
-  width: 100%;
-  max-width: 1110px;
-  min-height: 100vh;
-  @include flex-column();
-
-  @include media-query-mobile {
-    padding: 0 24px;
-  }
-
   // Base Layout
-
   .main,
   .main .product,
   .main .product-list {
@@ -167,9 +123,13 @@ export default {
 
     /* prettier-ignore */
     &.main--home {
+      /* 'main' has top margin equal to the height of the 'header' to fix the 'position: fixed'@at-root
+          Home page has 'position: relative', so this extra margin has to be removed */
+      margin-top: 0;
+      
       @include gap-responsive(
         gap, 
-        200px, 96px, 120px);
+        160px, 96px, 120px);
       
       @include margin-or-padding-responsive(
         padding-bottom, 
@@ -207,21 +167,90 @@ export default {
       }
     }
   }
+
+  .page-error {
+    width: 100%;
+    height: 580px;
+    @include center-flex(center);
+    flex-direction: column;
+
+    h3 {
+      text-align: center;
+      margin-bottom: $sp-4;
+    }
+
+    @include media-query-mobile {
+      height: 420px;
+    }
+  }
+
+  // Header & Footer Background
+  // Hero Background (home)
+
+  .header-bg,
+  .footer-bg {
+    background-color: $dark-bg;
+    position: absolute;
+    z-index: -10;
+    width: 100%;
+  }
+
+  .header-bg {
+    top: 0;
+    @include header-height-responsive();
+
+    /* prettier-ignore */
+    &.header-bg--hero {
+      @include width-or-height-responsive(
+        height, 
+        730px, 724px, 600px);
+      @include back-image-responsive(
+        './assets/home', 'image-header.jpg');
+      background-size: auto 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      @include media-query-tablet {
+        background-size: cover;
+      }
+
+      @include media-query-mobile {
+        //background-position: right 50% bottom 0px;
+      }
+
+      &::before {
+        content: '';
+        background-color: rgba(0, 0, 0, 0.3);
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .footer-bg {
+    bottom: 0;
+    @include footer-height-responsive();
+  }
 }
 
-.error {
-  width: 100%;
-  height: 580px;
-  @include center-flex(center);
-  flex-direction: column;
-
-  h3 {
-    text-align: center;
-    margin-bottom: $sp-4;
+.fade {
+  &-enter-active {
+    transition: opacity 0.25s ease-out;
   }
 
-  @include media-query-mobile {
-    height: 420px;
+  &-leave-active {
+    transition: opacity 0.2s ease-in;
   }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+  }
+
+  /* This in unnecessary, as it's default:
+  **  &-enter-to, &-leave-from { opacity: 1; }  
+  */
 }
 </style>

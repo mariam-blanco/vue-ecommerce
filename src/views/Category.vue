@@ -15,9 +15,7 @@
       :key="product.id"
       has-heading2
     >
-      <router-link :to="{ name: 'Product', params: { slug: product.slug } }">
-        <BaseButton class="btn--primary" />
-      </router-link>
+      <BaseButton @click="goToProduct(product.slug)" class="btn--primary" />
     </BaseCard>
   </section>
 </template>
@@ -50,6 +48,15 @@ export default {
       return this.$store.state.loading
     },
   },
+
+  methods: {
+    goToProduct(productSlug) {
+      this.$router.push({
+        name: 'Product',
+        params: { slug: productSlug },
+      })
+    },
+  },
 }
 </script>
 
@@ -67,12 +74,12 @@ export default {
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     width: 100vw;
-    @include hero-title-height-responsive();
     z-index: -10;
     display: block;
     background-color: $dark-bg;
+    @include hero-title-height-responsive();
   }
 }
 </style>

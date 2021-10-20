@@ -33,7 +33,7 @@ export default {
 
     decreaseQuantity() {
       this.itemFound &&
-        this.itemFound.quantity > 0 &&
+        this.itemFound.quantity >= 1 &&
         this.$store.dispatch('decreaseCartQuantity', this.id)
       !this.itemFound && this.$store.commit('DECREASE_QUANTITY')
     },
