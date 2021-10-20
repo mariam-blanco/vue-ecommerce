@@ -37,9 +37,7 @@ export default {
   }
 }
 
-.main--checkout .modal-mask {
-  top: 0;
-}
+
 
 .modal {
   z-index: 30;
@@ -71,21 +69,7 @@ export default {
     }
   }
 
-  &.modal--confirmation {
-    max-width: 540px;
-    top: 50px;
-    //transform: translate(0, -50%);
-
-    @include media-query-tablet {
-      margin-right: $sp-5;
-      margin-left: $sp-5;
-    }
-
-    @include media-query-mobile {
-      margin-right: $sp-3;
-      margin-left: $sp-3;
-    }
-  }
+ 
 
   &.modal--navigation {
     top: 0;
@@ -106,7 +90,30 @@ export default {
       right: 0;
     }
   }
+  /* IMPORTANT: Don't change the place of '.main--checkout .modal-mask' classes
+     Are to place 'Shopping Confirmation' modal. It can cause problems in another modals
+     when opens in this Checkout page ------------------------------------------------- */
+  .main--checkout .modal-mask {
+    top: 0;
+  }
+  
+  &.modal--confirmation {
+    max-width: 540px;
+    top: 50px;
+    //transform: translate(0, -50%);
 
+    @include media-query-tablet {
+      margin-right: $sp-5;
+      margin-left: $sp-5;
+    }
+
+    @include media-query-mobile {
+      margin-right: $sp-3;
+      margin-left: $sp-3;
+    }
+  }
+  /* <<< ------------------------------------------------------------------------------- */
+  
   &.modal--centered {
     top: 50%;
     left: 50%;
