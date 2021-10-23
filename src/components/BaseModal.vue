@@ -9,7 +9,7 @@
 <script>
 export default {
   name: 'BaseModal',
-  inheritAttrs: false, // classes applied to tha component can be passed to the child
+  inheritAttrs: false, // classes applied to the component can be passed to the child
   methods: {
     closeModal() {
       this.$store.state.activeModalComponent !== 'ShoppingConfirmation' &&
@@ -36,8 +36,6 @@ export default {
     bottom: -90px;
   }
 }
-
-
 
 .modal {
   z-index: 30;
@@ -69,8 +67,6 @@ export default {
     }
   }
 
- 
-
   &.modal--navigation {
     top: 0;
 
@@ -96,7 +92,7 @@ export default {
   .main--checkout .modal-mask {
     top: 0;
   }
-  
+
   &.modal--confirmation {
     max-width: 540px;
     top: 50px;
@@ -113,7 +109,7 @@ export default {
     }
   }
   /* <<< ------------------------------------------------------------------------------- */
-  
+
   &.modal--centered {
     top: 50%;
     left: 50%;

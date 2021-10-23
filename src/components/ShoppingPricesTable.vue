@@ -31,11 +31,11 @@ export default {
     },
 
     tax() {
-      return this.$store.state.tax
+      return this.$store.getters.tax
     },
 
     grandTotal() {
-      return this.$store.state.grandTotal
+      return this.$store.getters.grandTotal
     },
   },
 }

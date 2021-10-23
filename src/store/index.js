@@ -4,14 +4,11 @@ import router from '../router'
 
 export default createStore({
   state: {
-    products: null,
+    products: [],
     product: {},
-    initialQuantity: 1 /* product is not yet in the cart */,
+    initialQuantity: null /* product is not yet in the cart */,
     cart: [],
-    cartNumItems: 0,
     total: 0,
-    tax: 0,
-    grandTotal: 0,
     isOpen: false,
     activeModalComponent: null,
     isLoading: false,
@@ -26,29 +23,22 @@ export default createStore({
       state.product = product
     },
 
-    // Initial quantity
+    // INITIAL QUANTITY
 
     SET_QUANTITY(state, quantity) {
       state.initialQuantity = quantity
     },
 
-    /* Increase & decrease initial quantity of the product 
-       just before to get added to cart */
     INCREASE_QUANTITY(state) {
       state.initialQuantity++
     },
 
     DECREASE_QUANTITY(state) {
-      state.initialQuantity >= 1 && state.initialQuantity--
+      state.initialQuantity--
     },
 
-    // Cart
+    // CART
 
-    SET_CART_NUM_ITEMS(state) {
-      state.cartNumItems = state.cart.length
-    },
-
-    /* Adds product to the cart */
     ADD_PRODUCT(state, cartItem) {
       state.cart.push(cartItem)
     },
@@ -57,32 +47,30 @@ export default createStore({
       state.cart = cart
     },
 
-    /* Updates quantity of items that already exist in the cart */
-    INCREASE_CART_ITEM_QUANTITY(state, id) {
-      const found = state.cart.find((item) => item.id === id)
+    // CART ITEM QUANTITY
+
+    UPDATE_CART_ITEM_QUANTITY(state, found) {
+      found.quantity = state.initialQuantity
+    },
+
+    INCREASE_CART_ITEM_QUANTITY(state, found) {
       found.quantity++
     },
 
-    DECREASE_CART_ITEM_QUANTITY(state, id) {
-      const found = state.cart.find((item) => item.id === id)
+    DECREASE_CART_ITEM_QUANTITY(state, found) {
       found.quantity--
     },
 
-    // Prices
+    // TOTAL PRICE
 
-    SET_TOTAL(state, total) {
-      state.total = total
+    SET_TOTAL(state) {
+      state.total = state.cart.reduce(
+        (acc, item) => item.price * item.quantity + acc,
+        0
+      )
     },
 
-    SET_TAX(state, tax) {
-      state.tax = tax
-    },
-
-    SET_GRAND_TOTAL(state, grandTotal) {
-      state.grandTotal = grandTotal
-    },
-
-    // Modal
+    // MODAL
 
     SET_IS_OPEN(state, isOpen) {
       state.isOpen = isOpen
@@ -92,36 +80,57 @@ export default createStore({
       state.activeModalComponent = component
     },
 
-    // Loading
+    // LOADING
 
     SET_IS_LOADING(state, isLoading) {
       state.isLoading = isLoading
     },
   },
 
+  getters: {
+    cartNumItems: (state) => state.cart.length,
+
+    found: (state) => (id) => {
+      return state.cart.find((item) => id === item.id)
+    },
+
+    orderByModel: (state) => {
+      /* Order by model name. New products go first */
+      const products = state.products
+
+      if (Object.keys(products).length > 1) {
+        products.sort((a, b) => (a.slug < b.slug ? 1 : -1))
+        products.forEach((product, i) => {
+          product.new && products.splice(i, 1) && products.unshift(product)
+        })
+        return products
+      } else {
+        return state.products
+      }
+    },
+
+    tax: (state) => Math.floor(state.total * 0.2),
+
+    grandTotal: (state, getters) => state.total + getters.tax + 50,
+  },
+
   actions: {
+    
     fetchProducts({ commit }, category) {
+      commit('SET_IS_LOADING', true)
+      
       ProductService.getProductsByCategory(category)
         .then((response) => {
-          const results = response.data
-
-          if (results.length === 0) {
+          
+          if (response.data.length > 0) {
+            commit('SET_PRODUCTS', response.data) 
+            commit('SET_IS_LOADING', false)  
+          } else {
             router.push({
               name: '404Resource',
               params: { resource: 'category' },
             })
-          } else if (results.length > 1) {
-            /* order by product model name */
-            results.sort((a, b) => (a.slug < b.slug ? 1 : -1))
-            /* place "New product" at the top of the list */
-            results.forEach((product, i) => {
-              if (product.new) {
-                results.splice(i, 1)
-                results.unshift(product)
-              }
-            })
           }
-          commit('SET_PRODUCTS', response.data)
         })
         .catch((error) => {
           console.error(error.message, error.name)
@@ -130,10 +139,16 @@ export default createStore({
     },
 
     fetchProduct({ commit }, slug) {
+      /* clear out previous 'product' before the API call. */
+      commit('SET_PRODUCT', {}) 
+      commit('SET_IS_LOADING', true) 
+      
       ProductService.getDetails(slug)
         .then((response) => {
+          
           if (response.data.length !== 0) {
             commit('SET_PRODUCT', response.data[0])
+            commit('SET_IS_LOADING', false)   
           } else if (response.data.length === 0) {
             router.push({
               name: '404Resource',
@@ -147,57 +162,76 @@ export default createStore({
         })
     },
 
-    // Adds product to the cart
-    addProductToCart({ commit, state }, cartItem) {
-      const found = state.cart.find((item) => cartItem.id === item.id)
+    //
+    // CART
+    //
 
-      if (!found) {
-        commit('ADD_PRODUCT', cartItem)
-        commit('SET_CART_NUM_ITEMS')
-        localStorage.setItem('cart', JSON.stringify(state.cart))
-        this.dispatch('calculatePrices')
+    /* Adds product to the cart */
+    addProductToCart({ commit, state, getters, dispatch }, id) {
+      const cartItem = {
+        id: state.product.id,
+        name: state.product.name,
+        price: state.product.price,
+        image: `${state.product.slug}.jpg`,
+        quantity: state.initialQuantity,
       }
+
+      if (!getters.found(id)) {
+        commit('ADD_PRODUCT', cartItem)
+        localStorage.setItem('cart', JSON.stringify(state.cart))
+      } else {
+        commit('UPDATE_CART_ITEM_QUANTITY', getters.found(id))
+      }
+
+      dispatch('calculatePrices')
     },
 
-    //updateCartNumItems({ commit, state }) {
-    //  commit('SET_CART_NUM_ITEMS', state.cart.length)
-    //},
-
-    // Updates quantity of items that already exist in the cart
-    increaseCartQuantity({ commit }, id) {
-      commit('INCREASE_CART_ITEM_QUANTITY', id)
-      this.dispatch('calculatePrices')
-    },
-
-    decreaseCartQuantity({ commit }, id) {
-      commit('DECREASE_CART_ITEM_QUANTITY', id)
-      this.dispatch('calculatePrices')
-    },
-
+    // Clear cart
     removeAllCartItems({ commit }) {
       commit('SET_CART', [])
-      commit('SET_CART_NUM_ITEMS')
-      commit('SET_TOTAL', null)
-      commit('SET_TAX', null)
-      commit('SET_GRAND_TOTAL', null)
+      //commit('SET_CART_NUM_ITEMS')
+
       localStorage.clear()
     },
 
-    calculatePrices({ commit, state }) {
-      const total = state.cart.reduce((acc, item) => {
-        return item.price * item.quantity + acc
-      }, 0)
-      commit('SET_TOTAL', total)
-      localStorage.setItem('total', JSON.stringify(total))
+    //
+    //  INITIAL QUANTITY
+    //
 
-      const tax = Math.floor(total * 0.2)
-      commit('SET_TAX', tax)
-
-      const grandTotal = total + tax + 50
-      commit('SET_GRAND_TOTAL', grandTotal)
-
-      localStorage.setItem('summary', JSON.stringify({ tax, grandTotal }))
+    setInitialQuantity({ commit, getters }, id) {
+      !getters.found(id)
+        ? commit('SET_QUANTITY', 1)
+        : commit('SET_QUANTITY', getters.found(id).quantity)
     },
+
+    //
+    //  SHOPPING CART ITEMS QUANTITY
+    //
+
+    /* increaseCartQuantity() --> Updates quantity of items that already exist 
+       in the cart. It also recalculate the price. */
+    increaseCartQuantity({ commit, dispatch, state, getters }, id) {
+      commit('INCREASE_CART_ITEM_QUANTITY', getters.found(id))
+      dispatch('calculatePrices')
+
+      localStorage.setItem('cart', JSON.stringify(state.cart))
+    },
+
+    decreaseCartQuantity({ commit, dispatch, state, getters }, id) {
+      getters.found(id).quantity > 1 &&
+        commit('DECREASE_CART_ITEM_QUANTITY', getters.found(id))
+      dispatch('calculatePrices')
+
+      localStorage.setItem('cart', JSON.stringify(state.cart))
+    },
+
+    calculatePrices({ commit }) {
+      commit('SET_TOTAL')
+    },
+
+    //
+    //  MODAL
+    //
 
     openModalComponent({ commit }, component) {
       commit('SET_ACTIVE_MODAL_COMPONENT', component)

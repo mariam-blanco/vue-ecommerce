@@ -7,7 +7,7 @@
       />
     </div>
     <div class="shopping-item__content">
-      <h6>{{ cartItem.shortName }}</h6>
+      <h6>{{ shortName }}</h6>
       <p class="price">{{ cartItem.price }}</p>
     </div>
     <div class="shopping-item__quantity">
@@ -16,6 +16,7 @@
         v-if="type === 'cart'"
         :id="cartItem.id"
         :quantity="cartItem.quantity"
+        btn-quantity-type="cartQuantity"
         class="item-quantity--small"
       />
     </div>
@@ -33,6 +34,17 @@ export default {
   },
   components: {
     ShoppingButtonQuantity,
+  },
+  computed: {
+    shortName() {
+      const removeWords = ['WIRELESS', 'HEADPHONES', 'EARFHONES', 'SPEAKER']
+      const itemName = this.cartItem.name.toUpperCase()
+      const removeWord = removeWords.filter(
+        (word) => itemName.indexOf(word) !== -1
+      )
+      const i = itemName.indexOf(removeWord)
+      return itemName.slice(0, i - 1)
+    },
   },
 }
 </script>

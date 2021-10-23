@@ -1,7 +1,8 @@
 <template>
   <BaseGoBackLink />
 
-  <section v-if="product" class="section product">
+  <BaseLoading v-if="isLoading" />
+  <section v-if="!isLoading" class="section product">
     <div class="product__card">
       <BaseCard
         class="card--product-details"
@@ -14,7 +15,10 @@
         has-heading2
       >
         <div class="card-button-set">
-          <ShoppingButtonQuantity :id="product.id" />
+          <ShoppingButtonQuantity
+            :id="product.id"
+            btn-quantity-type="productQuantity"
+          />
           <BaseButton
             @click="addToCart"
             class="btn--primary"
@@ -74,20 +78,20 @@
 import BaseCard from '@/components/BaseCard.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseGoBackLink from '@/components/BaseGoBackLink.vue'
+import BaseLoading from '@/components/BaseLoading.vue'
 import ShoppingButtonQuantity from '@/components/ShoppingButtonQuantity.vue'
 import NavCardsLayout from '@/components/NavCardsLayout.vue'
 import NavCard from '@/components/NavCard.vue'
-
 import { watchEffect } from 'vue'
 
 export default {
   name: 'Product',
   props: ['slug'],
-
   components: {
     BaseCard,
     BaseButton,
     BaseGoBackLink,
+    BaseLoading,
     ShoppingButtonQuantity,
     NavCardsLayout,
     NavCard,
@@ -95,14 +99,7 @@ export default {
 
   created() {
     watchEffect(() => {
-      /* IMPORTANT! Before to make the API call we have to clear out the 'product'
-         shown in the page. If not, we will have to click the browser update button
-         to see new product. */
-      this.$store.commit('SET_PRODUCT', {})
       this.$store.dispatch('fetchProduct', this.slug)
-
-      /* Initializes quantity with a new product details page */
-      this.$store.commit('SET_QUANTITY', 1)
     })
   },
 
@@ -116,14 +113,8 @@ export default {
     includes() {
       return this.$store.state.product.includes
     },
-    shortName() {
-      const removeWords = ['WIRELESS', 'HEADPHONES', 'EARFHONES', 'SPEAKER']
-      const itemName = this.product.name.toUpperCase()
-      const removeWord = removeWords.filter(
-        (word) => itemName.indexOf(word) !== -1
-      )
-      const i = itemName.indexOf(removeWord)
-      return itemName.slice(0, i - 1)
+    isLoading() {
+      return this.$store.state.loading
     },
   },
 
@@ -136,16 +127,7 @@ export default {
     },
 
     addToCart() {
-      const cartItem = {
-        id: this.product.id,
-        name: this.product.name,
-        shortName: this.shortName,
-        price: this.product.price,
-        image: `${this.product.slug}.jpg`,
-        quantity: this.$store.state.initialQuantity,
-      }
-
-      this.$store.dispatch('addProductToCart', cartItem)
+      this.$store.dispatch('addProductToCart', this.product.id)
       this.$store.dispatch('openModalComponent', 'ShoppingCart')
       this.$store.commit('SET_IS_OPEN', true)
       window.scrollTo(0, 0)

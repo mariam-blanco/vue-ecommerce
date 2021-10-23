@@ -2,7 +2,7 @@
   <div class="header-bg" :class="$route.path == '/' && 'header-bg--hero'"></div>
   <div class="container">
     <TheHeader />
-    <main :class="`main main--${$route.name.toLowerCase()}`">
+    <main :class="`main main--${mainClassModifier}`">
       <router-view />
       <NavCategories
         v-if="$route.path !== '/checkout'"
@@ -52,12 +52,8 @@ export default {
   created() {
     if (localStorage.cart) {
       const savedCartItems = JSON.parse(localStorage.getItem('cart'))
-      const savedSummary = JSON.parse(localStorage.getItem('summary'))
       this.$store.commit('SET_CART', savedCartItems)
-      this.$store.commit('SET_TOTAL', localStorage.getItem('total'))
-      this.$store.commit('SET_TAX', savedSummary.tax)
-      this.$store.commit('SET_GRAND_TOTAL', savedSummary.grandTotal)
-      this.$store.commit('SET_CART_NUM_ITEMS')
+      this.$store.dispatch('calculatePrices')
     }
   },
 
@@ -79,6 +75,11 @@ export default {
       return this.activeComponent === 'ShoppingCart' && 'cart' || 
              this.activeComponent === 'NavCategories' && 'navigation' || 
              this.activeComponent === 'ShoppingConfirmation' && 'confirmation' 
+    },
+
+    mainClassModifier() {
+      const routeName = this.$route.name
+      return routeName && routeName.toLowerCase()
     },
   },
 }

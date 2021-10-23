@@ -1,11 +1,11 @@
 <template>
-  <div v-if="products" class="hero-title">
+  <div v-if="productsOrderByModel" class="hero-title">
     <h1 class="text-white">{{ category }}</h1>
   </div>
-
-  <section class="section product-list">
+  <BaseLoading v-if="isLoading" />
+  <section v-if="!isLoading" class="section product-list">
     <BaseCard
-      v-for="(product, index) in products"
+      v-for="(product, index) in productsOrderByModel"
       class="card--product-by-category"
       :class="index === 0 || (index % 2 && 'card--reverse')"
       :name="product.name"
@@ -23,7 +23,7 @@
 <script>
 import BaseCard from '@/components/BaseCard.vue'
 import BaseButton from '@/components/BaseButton.vue'
-
+import BaseLoading from '@/components/BaseLoading.vue'
 import { watchEffect } from 'vue'
 
 export default {
@@ -32,6 +32,7 @@ export default {
   components: {
     BaseCard,
     BaseButton,
+    BaseLoading
   },
 
   created() {
@@ -41,8 +42,8 @@ export default {
   },
 
   computed: {
-    products() {
-      return this.$store.state.products
+    productsOrderByModel() {
+      return this.$store.getters.orderByModel
     },
     isLoading() {
       return this.$store.state.loading

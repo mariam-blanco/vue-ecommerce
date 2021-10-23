@@ -61,7 +61,7 @@ export default {
     },
 
     grandTotal() {
-      return this.$store.state.grandTotal
+      return this.$store.getters.grandTotal
     },
   },
   methods: {

@@ -60,7 +60,7 @@ export default {
     },
 
     numCartItems() {
-      return this.$store.state.cartNumItems
+      return this.$store.getters.cartNumItems
     },
   },
 

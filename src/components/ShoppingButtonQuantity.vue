@@ -1,41 +1,71 @@
 <template>
   <div class="item-quantity">
-    <button @click="decreaseQuantity()">-</button>
-    <span>{{ cartQuantity }}</span>
-    <button @click="increaseQuantity()">+</button>
+    <button @click="decrease()">-</button>
+    <span>{{ quantity }}</span>
+    <button @click="increase()">+</button>
   </div>
 </template>
 
 <script>
+/*
+ ** There are 3 cases of use:
+ ** Case 1: In Product page, when product has not been added to the cart
+ ** Case 2: In the ShoppingCart component, product is in the cart and user changes the quantity.
+ ** Case 3: In Product page, but the product has been already added to the cart.
+ **
+ ** There are to types of ShoppingButtonQuantity ('btn-quantity-type' prop):
+ ** 1. 'productQuantity'
+ ** 2. 'cartQuantity'
+ */
+
+
+
 export default {
   name: 'ShoppingButtonQuantity',
-  props: ['id'],
+  props: ['id', 'btnQuantityType'],
+
+  created() {
+    /* Initializes 'initialQuantity' state in the store */
+    if (this.btnQuantityType === 'productQuantity') {
+      this.$store.dispatch('setInitialQuantity', this.id)
+    }
+  },
+
   computed: {
     itemFound() {
-      return this.$store.state.cart.find((item) => item.id === this.id)
+      //return this.$store.state.cart.find((item) => item.id === this.id)
+      return this.$store.getters.found(this.id)
     },
 
-    cartQuantity() {
-      return this.itemFound
-        ? this.itemFound.quantity
-        : this.$store.state.initialQuantity
+    quantity() {
+      return this.btnQuantityType === 'productQuantity'
+        ? this.$store.state.initialQuantity
+        : this.itemFound.quantity
     },
   },
 
   methods: {
-    increaseQuantity() {
-      // A. Item is not yet in the cart: increase 'initialQuantity' state
-      // B. Item is already in the cart: update 'quantity' property of this item in the cart
-      this.itemFound
-        ? this.$store.dispatch('increaseCartQuantity', this.id)
-        : this.$store.commit('INCREASE_QUANTITY')
+    increase() {
+      const found = this.itemFound;
+      if (!found || (found && this.btnQuantityType === 'productQuantity')){
+        this.$store.commit('INCREASE_QUANTITY')
+      
+      } else if (found && this.btnQuantityType === 'cartQuantity') {
+        this.$store.dispatch('increaseCartQuantity', this.id)
+      }
     },
 
-    decreaseQuantity() {
-      this.itemFound &&
-        this.itemFound.quantity >= 1 &&
-        this.$store.dispatch('decreaseCartQuantity', this.id)
-      !this.itemFound && this.$store.commit('DECREASE_QUANTITY')
+    decrease() {
+      const found = this.itemFound;
+      if (this.quantity >= 1) {
+        
+        if (!found || (found && this.btnQuantityType === 'productQuantity')) {
+          this.$store.commit('DECREASE_QUANTITY')
+        
+        } else if (found && this.btnQuantityType === 'cartQuantity') {
+          this.$store.dispatch('decreaseCartQuantity', this.id)
+        }
+      }
     },
   },
 }
