@@ -2,8 +2,8 @@
   <div v-if="productsOrderByModel" class="hero-title">
     <h1 class="text-white">{{ category }}</h1>
   </div>
-  <BaseLoading v-if="isLoading" />
-  <section v-if="!isLoading" class="section product-list">
+
+  <section class="section product-list">
     <BaseCard
       v-for="(product, index) in productsOrderByModel"
       class="card--product-by-category"
@@ -23,7 +23,6 @@
 <script>
 import BaseCard from '@/components/BaseCard.vue'
 import BaseButton from '@/components/BaseButton.vue'
-import BaseLoading from '@/components/BaseLoading.vue'
 import { watchEffect } from 'vue'
 
 export default {
@@ -32,7 +31,6 @@ export default {
   components: {
     BaseCard,
     BaseButton,
-    BaseLoading
   },
 
   created() {
@@ -44,9 +42,6 @@ export default {
   computed: {
     productsOrderByModel() {
       return this.$store.getters.orderByModel
-    },
-    isLoading() {
-      return this.$store.state.loading
     },
   },
 

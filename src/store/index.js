@@ -47,8 +47,6 @@ export default createStore({
       state.cart = cart
     },
 
-    // CART ITEM QUANTITY
-
     UPDATE_CART_ITEM_QUANTITY(state, found) {
       found.quantity = state.initialQuantity
     },
@@ -89,11 +87,9 @@ export default createStore({
 
   getters: {
     cartNumItems: (state) => state.cart.length,
-
     found: (state) => (id) => {
       return state.cart.find((item) => id === item.id)
     },
-
     orderByModel: (state) => {
       /* Order by model name. New products go first */
       const products = state.products
@@ -110,27 +106,20 @@ export default createStore({
     },
 
     tax: (state) => Math.floor(state.total * 0.2),
-
     grandTotal: (state, getters) => state.total + getters.tax + 50,
   },
 
   actions: {
-    
     fetchProducts({ commit }, category) {
-      commit('SET_IS_LOADING', true)
-      
       ProductService.getProductsByCategory(category)
         .then((response) => {
-          
-          if (response.data.length > 0) {
-            commit('SET_PRODUCTS', response.data) 
-            commit('SET_IS_LOADING', false)  
-          } else {
-            router.push({
-              name: '404Resource',
-              params: { resource: 'category' },
-            })
-          }
+          response.data.length > 0
+            ? commit('SET_PRODUCTS', response.data) &&
+              commit('SET_IS_LOADING', false)
+            : router.push({
+                name: '404Resource',
+                params: { resource: 'category' },
+              })
         })
         .catch((error) => {
           console.error(error.message, error.name)
@@ -140,21 +129,16 @@ export default createStore({
 
     fetchProduct({ commit }, slug) {
       /* clear out previous 'product' before the API call. */
-      commit('SET_PRODUCT', {}) 
-      commit('SET_IS_LOADING', true) 
-      
+      commit('SET_PRODUCT', {})
+
       ProductService.getDetails(slug)
         .then((response) => {
-          
-          if (response.data.length !== 0) {
-            commit('SET_PRODUCT', response.data[0])
-            commit('SET_IS_LOADING', false)   
-          } else if (response.data.length === 0) {
-            router.push({
-              name: '404Resource',
-              params: { resource: 'product' },
-            })
-          }
+          response.data.length !== 0
+            ? commit('SET_PRODUCT', response.data[0])
+            : router.push({
+                name: '404Resource',
+                params: { resource: 'product' },
+              })
         })
         .catch((error) => {
           console.error(error.message, error.name)
@@ -166,7 +150,6 @@ export default createStore({
     // CART
     //
 
-    /* Adds product to the cart */
     addProductToCart({ commit, state, getters, dispatch }, id) {
       const cartItem = {
         id: state.product.id,
@@ -176,22 +159,36 @@ export default createStore({
         quantity: state.initialQuantity,
       }
 
-      if (!getters.found(id)) {
-        commit('ADD_PRODUCT', cartItem)
-        localStorage.setItem('cart', JSON.stringify(state.cart))
-      } else {
-        commit('UPDATE_CART_ITEM_QUANTITY', getters.found(id))
-      }
+      !getters.found(id)
+        ? commit('ADD_PRODUCT', cartItem)
+        : commit('UPDATE_CART_ITEM_QUANTITY', getters.found(id))
 
+      localStorage.setItem('cart', JSON.stringify(state.cart))
       dispatch('calculatePrices')
     },
 
-    // Clear cart
+    /* Updates quantity of items that already exist 
+       in the cart. It also recalculate the price. */
+    increaseCartQuantity({ commit, dispatch, state, getters }, id) {
+      commit('INCREASE_CART_ITEM_QUANTITY', getters.found(id))
+      dispatch('calculatePrices')
+      localStorage.setItem('cart', JSON.stringify(state.cart))
+    },
+
+    decreaseCartQuantity({ commit, dispatch, state, getters }, id) {
+      commit('DECREASE_CART_ITEM_QUANTITY', getters.found(id))
+      dispatch('calculatePrices')
+      localStorage.setItem('cart', JSON.stringify(state.cart))
+    },
+
+    /* Clear cart */
     removeAllCartItems({ commit }) {
       commit('SET_CART', [])
-      //commit('SET_CART_NUM_ITEMS')
-
       localStorage.clear()
+    },
+
+    calculatePrices({ commit }) {
+      commit('SET_TOTAL')
     },
 
     //
@@ -205,31 +202,6 @@ export default createStore({
     },
 
     //
-    //  SHOPPING CART ITEMS QUANTITY
-    //
-
-    /* increaseCartQuantity() --> Updates quantity of items that already exist 
-       in the cart. It also recalculate the price. */
-    increaseCartQuantity({ commit, dispatch, state, getters }, id) {
-      commit('INCREASE_CART_ITEM_QUANTITY', getters.found(id))
-      dispatch('calculatePrices')
-
-      localStorage.setItem('cart', JSON.stringify(state.cart))
-    },
-
-    decreaseCartQuantity({ commit, dispatch, state, getters }, id) {
-      getters.found(id).quantity > 1 &&
-        commit('DECREASE_CART_ITEM_QUANTITY', getters.found(id))
-      dispatch('calculatePrices')
-
-      localStorage.setItem('cart', JSON.stringify(state.cart))
-    },
-
-    calculatePrices({ commit }) {
-      commit('SET_TOTAL')
-    },
-
-    //
     //  MODAL
     //
 
@@ -237,5 +209,6 @@ export default createStore({
       commit('SET_ACTIVE_MODAL_COMPONENT', component)
     },
   },
+
   modules: {},
 })

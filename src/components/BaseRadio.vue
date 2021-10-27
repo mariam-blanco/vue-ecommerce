@@ -2,6 +2,7 @@
   <label
     class="form-field"
     :class="styleModifier && `form-field--${styleModifier}`"
+    :style="{ borderColor: (modelValue === value) ? '#D87D4A': null}"
   >
     <input
       type="radio"

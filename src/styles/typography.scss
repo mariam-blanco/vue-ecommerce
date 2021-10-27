@@ -92,4 +92,9 @@ label {
   color: $black;
   @include text(13px, 16px, -0.21px);
   text-transform: none; // removes 'text' mixin default value
+
+  & * {
+    font-weight: 200;
+  }
+
 }

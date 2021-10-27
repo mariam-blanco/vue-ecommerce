@@ -58,16 +58,12 @@ export default {
   },
 
   computed: {
-    isLoading() {
-      return this.$store.state.isLoading
+    isOpen() {
+      return this.$store.state.isOpen
     },
 
     activeComponent() {
       return this.$store.state.activeModalComponent
-    },
-
-    isOpen() {
-      return this.$store.state.isOpen
     },
 
     // prettier-ignore

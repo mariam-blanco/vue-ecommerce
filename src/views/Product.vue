@@ -1,8 +1,7 @@
 <template>
   <BaseGoBackLink />
 
-  <BaseLoading v-if="isLoading" />
-  <section v-if="!isLoading" class="section product">
+  <section class="section product">
     <div class="product__card">
       <BaseCard
         class="card--product-details"
@@ -78,7 +77,6 @@
 import BaseCard from '@/components/BaseCard.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseGoBackLink from '@/components/BaseGoBackLink.vue'
-import BaseLoading from '@/components/BaseLoading.vue'
 import ShoppingButtonQuantity from '@/components/ShoppingButtonQuantity.vue'
 import NavCardsLayout from '@/components/NavCardsLayout.vue'
 import NavCard from '@/components/NavCard.vue'
@@ -91,7 +89,6 @@ export default {
     BaseCard,
     BaseButton,
     BaseGoBackLink,
-    BaseLoading,
     ShoppingButtonQuantity,
     NavCardsLayout,
     NavCard,
@@ -100,6 +97,7 @@ export default {
   created() {
     watchEffect(() => {
       this.$store.dispatch('fetchProduct', this.slug)
+      this.$store.commit('SET_IS_LOADING', true)
     })
   },
 
@@ -112,9 +110,6 @@ export default {
     },
     includes() {
       return this.$store.state.product.includes
-    },
-    isLoading() {
-      return this.$store.state.loading
     },
   },
 

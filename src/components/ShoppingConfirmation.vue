@@ -2,7 +2,9 @@
   <ShoppingLayout class="shopping-confirmation">
     <!-- Header -------------------------------------------------->
     <template v-slot:header>
-      <div class="circle"></div>
+      <div class="circle">
+        <img src="@/assets/shared/desktop/check.svg" />
+      </div>
       <h3>Thank you for your order</h3>
       <p>You will receive an email confirmation shortly.</p>
     </template>
@@ -10,17 +12,21 @@
     <!-- Body: Shopping list -------------------------------------->
     <template v-slot:body>
       <div class="shopping-wrapper">
-        <ul class="shopping-list">
+  
+        <ul :class="['shopping-list', { 'show-first-item': isFirstShown }]"> 
           <ShoppingItem
-            v-for="(cartItem, index) in cartItems"
-            :cart-item="cartItem"
+            v-for="(item, index) in cartItems"
+            :cart-item="item"
+            type="summary"
             :key="index"
-          >
-          </ShoppingItem>
+          />
         </ul>
-        <hr />
-        <div class="show-more">
-          <a>View less</a>
+        
+       
+        <div v-if="numCartItems > 1" class="show-more">
+          <a @click="toggleShow()">
+            {{ isFirstShown ? `and ${numCartItems - 1} other item(s)` : 'View less'}}
+          </a>
         </div>
       </div>
       <!-- Body: Price ------------------------------------------->
@@ -46,6 +52,7 @@ import ShoppingItem from '@/components/ShoppingItem.vue'
 import ShoppingLayout from '@/components/ShoppingLayout.vue'
 import BaseButton from '@/components/BaseButton.vue'
 
+
 export default {
   name: 'ShoppingConfirmation',
 
@@ -53,26 +60,41 @@ export default {
     ShoppingItem,
     ShoppingLayout,
     BaseButton,
+  
+  },
+
+  data() {
+    return {
+      isFirstShown: true
+    }
   },
 
   computed: {
+
     cartItems() {
       return this.$store.state.cart
+    },
+
+    numCartItems() {
+      return this.$store.getters.cartNumItems
     },
 
     grandTotal() {
       return this.$store.getters.grandTotal
     },
+
   },
   methods: {
-    /* The method 'replace' is similar to 'push' method but disables the
-       browser back botton */
+    toggleShow() {
+      this.isFirstShown = !this.isFirstShown
+    },
+    
     goHome() {
-      /* 1- Remove all items from client cart */
+      // 1. Remove all items from cart 
+      // 2. Replaces current route with 'Home' route in the histoty of the browser 
+      // 3. Close modal 
       this.$store.dispatch('removeAllCartItems')
-      /* 2- Replaces current route with 'Home' route in the histoty of the browser */
       this.$router.replace({ name: 'Home' })
-      /* 3- Close modal */
       this.$store.commit('SET_IS_OPEN', false)
     },
   },
@@ -97,6 +119,8 @@ export default {
       border-radius: 50%;
       background-color: $primary-color;
       margin-bottom: $sp-4;
+      padding: 21px;
+
 
       @include media-query-mobile {
         margin-bottom: $sp-3;
@@ -129,23 +153,30 @@ export default {
       flex: 1;
       padding: $sp-3 $sp-3 0;
       padding-bottom: 0;
-
+ 
       .shopping-list {
         width: 100%;
         margin-bottom: $sp-2;
+        
+        &.show-first-item {
+        
+          li.shopping-item:nth-child(1n+2) {
+            display: none
+          }
+        } 
       }
 
-      hr {
-        opacity: 0.1;
-      }
+      
 
       .show-more {
         height: 48px;
         text-align: center;
+        border-top: 1px solid hsla(0, 0, 59%, 0.1);
         padding-top: $sp-1;
         padding-bottom: $sp-3;
 
         a {
+          cursor: pointer;
           font-size: 12px;
           font-weight: 700;
         }

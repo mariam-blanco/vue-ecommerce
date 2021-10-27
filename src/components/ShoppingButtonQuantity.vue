@@ -1,8 +1,8 @@
 <template>
   <div class="item-quantity">
-    <button @click="decrease()">-</button>
+    <button @click="decrease(btnQuantityType)">-</button>
     <span>{{ quantity }}</span>
-    <button @click="increase()">+</button>
+    <button @click="increase(btnQuantityType)">+</button>
   </div>
 </template>
 
@@ -18,8 +18,6 @@
  ** 2. 'cartQuantity'
  */
 
-
-
 export default {
   name: 'ShoppingButtonQuantity',
   props: ['id', 'btnQuantityType'],
@@ -33,7 +31,6 @@ export default {
 
   computed: {
     itemFound() {
-      //return this.$store.state.cart.find((item) => item.id === this.id)
       return this.$store.getters.found(this.id)
     },
 
@@ -45,24 +42,23 @@ export default {
   },
 
   methods: {
-    increase() {
-      const found = this.itemFound;
-      if (!found || (found && this.btnQuantityType === 'productQuantity')){
+    increase(type) {
+      const found = this.itemFound
+
+      if (!found || (found && type === 'productQuantity')) {
         this.$store.commit('INCREASE_QUANTITY')
-      
-      } else if (found && this.btnQuantityType === 'cartQuantity') {
+      } else if (found && type === 'cartQuantity') {
         this.$store.dispatch('increaseCartQuantity', this.id)
       }
     },
 
-    decrease() {
-      const found = this.itemFound;
-      if (this.quantity >= 1) {
-        
-        if (!found || (found && this.btnQuantityType === 'productQuantity')) {
+    decrease(type) {
+      const found = this.itemFound
+      // 'this.quantity > 1' avoid reduce quantity below 1
+      if (this.quantity > 1) {
+        if (!found || (found && type === 'productQuantity')) {
           this.$store.commit('DECREASE_QUANTITY')
-        
-        } else if (found && this.btnQuantityType === 'cartQuantity') {
+        } else if (found && type === 'cartQuantity') {
           this.$store.dispatch('decreaseCartQuantity', this.id)
         }
       }

@@ -81,7 +81,6 @@
           v-model="clientDetails.paymentMethod"
           value="eMoney"
           name="payment-method"
-          checked
         />
 
         <BaseRadio
@@ -98,6 +97,7 @@
           v-model="clientDetails.eMoney.number"
           type="text"
           placeholder="238521993"
+          :error="errors.eMoneyNumber"
         />
         <BaseInput
           v-if="clientDetails.paymentMethod === 'eMoney'"
@@ -105,6 +105,7 @@
           v-model="clientDetails.eMoney.pin"
           type="text"
           placeholder="6891"
+          :error="errors.eMoneyPin"
         />
 
         <div v-if="clientDetails.paymentMethod === 'cash'" class="payment-cash">
@@ -144,8 +145,8 @@ export default {
         country: '',
         paymentMethod: 'eMoney',
         eMoney: {
-          number: null,
-          pin: null,
+          number: '',
+          pin: '',
         },
       },
     }
@@ -158,15 +159,21 @@ export default {
       const { paymentMethod, eMoney, ...clientDetailsRest } = this.clientDetails
 
       for (const detail in clientDetailsRest) {
-        if (!clientDetailsRest[detail]) {
-          this.errors[detail] = `${detail} required`
-        }
+        !clientDetailsRest[detail] && (this.errors[detail] = `${detail} required`)
+      }
+
+      if (paymentMethod === 'eMoney') {
+        console.log(paymentMethod)
+        !eMoney.number && (this.errors.eMoneyNumber = 'number required')
+        !eMoney.pin && (this.errors.eMoneyPin = 'PIN required')
       }
 
       return Object.keys(this.errors).length !== 0 ? true : false
     },
 
     sendForm() {
+      console.log(this.formNotValid())
+      console.log(this.errors)
       // 1.- confirm form is filled & send the information
       if (this.formNotValid()) {
         return
