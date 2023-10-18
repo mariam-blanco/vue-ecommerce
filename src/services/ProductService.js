@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const apiClient = axios.create({
-  baseURL: 'https://fake-server-app-01.herokuapp.com',
+  baseURL: 'https://fake-server-production.up.railway.app',
   withCredentials: false,
   headers: {
     Accept: 'application/json',

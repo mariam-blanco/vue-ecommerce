@@ -46,7 +46,7 @@ export default {
   }
 
   &.btn--secondary {
-    background-color: black;
+    background-color: $black;
     color: $white;
 
     &:hover {
