@@ -58,7 +58,7 @@ Los usuarios deben poder:
 
 Para hacer una simulación de peticiones y envío de datos se crea un servidor fake con [JSON Server](https://github.com/typicode/json-server). Un archivo db.json con los datos de los productos hace la función de base de datos:
 
-[https://fake-server-app-01.herokuapp.com/](https://fake-server-app-01.herokuapp.com/)
+[https://fake-server-production.up.railway.app](https://fake-server-production.up.railway.app)
 
 Fuente: [Deploying Fake Back-End Server & DataBase Using JSON-SERVER, GitHub, and Heroku.](https://dev.to/youssefzidan/deploying-fake-back-end-server-database-using-json-server-github-and-heroku-1lm4)
 
@@ -485,9 +485,6 @@ sendForm() {
 
 - HTML
 - CSS y Sass
-- Flexbox
-- CSS Grid
-- Responsive Design
 - [Vue 3](https://v3.vuejs.org/) - librería JS
 - [Vue Router](https://next.router.vuejs.org/) - Para las rutas
 - [Vuex](https://next.vuex.vuejs.org/)
